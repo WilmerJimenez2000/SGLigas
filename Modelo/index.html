@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="registroForm" action="prueba.php" method="post">
+        <label for="correo">Correo:</label>
+        <input type="email" id="correo" name="correo" required><br><br>
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" name="contrasena" required><br><br>
+
+        <button type="submit" class="login-button" onclick="validarlogin()">Ingresar</button>
+    </form>
+</body>
+<script>
+    function validarlogin() {
+    event.preventDefault();
+    
+    //const correo = ['a','b','c'];
+    const password = document.getElementById('contrasena').value;
+    const nombre = document.getElementById('nombre').value;
+
+    var miArray = ['a', 'b', 'c', 'd'];
+
+// Convertir el array a una cadena JSON
+var jsonData = JSON.stringify(miArray);
+
+    fetch('prueba.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `correo=${jsonData}&nombre=${nombre}&password=${password}`,
+    })
+    .then(response => response.json()) 
+    .then(data => {
+        alert(data.datos)   
+});
+}
+</script>
+</html>
