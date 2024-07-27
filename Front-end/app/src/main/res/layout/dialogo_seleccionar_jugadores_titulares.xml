@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/view11"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#EDEDED" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:id="@+id/image_equipo_L_JT"
+                android:layout_width="25dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/icon_user_black" />
+
+            <ImageView
+                android:id="@+id/image_equipo_V_JT"
+                android:layout_width="25dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/icon_user_black" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view12"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#EDEDED" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ScrollView
+                android:id="@+id/scrollView_jugadoresTL"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:background="@drawable/border2"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_jugadoresTL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!-- No es necesario agregar CheckBox aquí, ya que se hará dinámicamente en el código Kotlin -->
+                </LinearLayout>
+
+            </ScrollView>
+
+            <ScrollView
+                android:id="@+id/scrollView_jugadoresTV"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:background="@drawable/border2"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_jugadoresTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!-- No es necesario agregar CheckBox aquí, ya que se hará dinámicamente en el código Kotlin -->
+                </LinearLayout>
+
+            </ScrollView>
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

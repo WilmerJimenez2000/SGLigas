@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:foregroundGravity="center"
+    app:layout_anchorGravity="center"
+    tools:context=".Partidos.Fragmento_Estadisticas_Partido.Fragment_registrar_estadisticas">
+
+
+
+
+    <LinearLayout
+        android:id="@+id/LinearLayout_secundario"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Estadísticas ya registradas, no se pueden modificar"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/LinearLayout_principal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|top"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="385dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_margin="8dp"
+
+                    android:background="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textNombre7"
+                            android:layout_width="365dp"
+                            android:layout_height="30dp"
+
+                            android:gravity="center|left"
+                            android:text="INGRESAR JUGADORES "
+                            android:textColor="#000000"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:visibility="visible" />
+
+                        <View
+                            android:id="@+id/view9"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:background="#EDEDED" />
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp" />
+
+                        <Button
+                            android:id="@+id/btn_ingresar_jugadores_titulares"
+                            android:layout_width="145dp"
+                            android:layout_height="wrap_content"
+                            android:text="Ingresar" />
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp" />
+
+                        <View
+                            android:id="@+id/view10"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:background="#EDEDED" />
+
+                        <TextView
+                            android:id="@+id/textNombre"
+                            android:layout_width="365dp"
+                            android:layout_height="40dp"
+
+                            android:gravity="center|left"
+                            android:text="REGISTRAR ESTADÍSTICAS"
+                            android:textColor="#000000"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:background="#EDEDED" />
+
+                        <TextView
+                            android:id="@+id/textView_mensaje"
+                            android:layout_width="350dp"
+                            android:layout_height="150dp"
+                            android:gravity="center"
+                            android:text="Para registrar las estadísticas, ingrese los jugadores titulares."
+                            android:textColor="#000000" />
+
+                        <View
+                            android:id="@+id/view14"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:background="#EDEDED" />
+
+                        <LinearLayout
+                            android:id="@+id/LInearLayoutRegistrarEstadisticas"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="15dp" />
+
+                            <TextView
+                                android:id="@+id/textView24"
+                                android:layout_width="250dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="right"
+                                android:text="Jugadores "
+                                android:textColor="#000000"
+                                android:textSize="14sp" />
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="15dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="39dp"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/image_equipo_L"
+                                    android:layout_width="250dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:src="@drawable/icon_user_black" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="#460C3667"
+                                    android:orientation="vertical">
+
+                                    <Spinner
+                                        android:id="@+id/spinner_jugadores_T_L"
+                                        android:layout_width="250dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="#000000" />
+                                </LinearLayout>
+
+                                <Space
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1" />
+
+
+                            </LinearLayout>
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="15dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="39dp"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/image_equipo_V"
+                                    android:layout_width="250dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:src="@drawable/icon_user_black" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="#460C3667"
+                                    android:orientation="vertical">
+
+                                    <Spinner
+                                        android:id="@+id/spinner_jugadores_T_V"
+                                        android:layout_width="250dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="#000000" />
+                                </LinearLayout>
+
+                                <Space
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1" />
+
+                            </LinearLayout>
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="15dp" />
+
+                            <View
+                                android:id="@+id/view"
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:background="#EDEDED" />
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+
+                                android:layout_margin="8dp"
+
+                                android:background="@android:color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="left"
+                                    android:gravity="center|left"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/textView_numero"
+                                        android:layout_width="5dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:text="1"
+                                        android:visibility="invisible" />
+
+                                    <TextView
+                                        android:id="@+id/textView_nombreJ"
+                                        android:layout_width="70dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Jugador"
+                                        android:textColor="#000000" />
+
+                                    <TextView
+                                        android:id="@+id/textView_TA"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="TA"
+                                        android:textColor="#000000" />
+
+                                    <TextView
+                                        android:id="@+id/textView_TR"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="TR"
+                                        android:textColor="#000000" />
+
+                                    <TextView
+                                        android:id="@+id/textView_gol"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="GOL/R"
+                                        android:textColor="#000000" />
+
+                                    <TextView
+                                        android:id="@+id/textView_agol"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="AGOL"
+                                        android:textColor="#000000" />
+
+                                    <ImageView
+                                        android:id="@+id/imageView15"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="20dp"
+                                        android:layout_weight="1"
+                                        android:visibility="invisible"
+                                        app:srcCompat="@drawable/x" />
+
+
+                                </LinearLayout>
+
+
+                            </androidx.cardview.widget.CardView>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recycler_jugadores"
+                                android:layout_width="match_parent"
+                                android:layout_height="105dp"
+                                android:background="#460C3667">
+
+                            </androidx.recyclerview.widget.RecyclerView>
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="5dp" />
+
+                            <View
+                                android:id="@+id/view13"
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:background="#EDEDED" />
+
+                            <TextView
+                                android:id="@+id/textNombre3"
+                                android:layout_width="365dp"
+                                android:layout_height="40dp"
+
+                                android:gravity="center|left"
+                                android:text="EQUIPO LOCAL"
+                                android:textColor="#000000"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:id="@+id/view4"
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:background="#EDEDED" />
+
+                            <EditText
+                                android:id="@+id/editText_informe_local"
+                                android:layout_width="match_parent"
+                                android:layout_height="127dp"
+                                android:ems="10"
+                                android:gravity="start|top"
+                                android:hint="Ingresa el informe del árbitro"
+                                android:inputType="textMultiLine" />
+
+                            <TextView
+                                android:id="@+id/textNombre4"
+                                android:layout_width="365dp"
+                                android:layout_height="40dp"
+
+                                android:gravity="center|left"
+                                android:text="EQUIPO VISITANTE"
+                                android:textColor="#000000"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:id="@+id/view5"
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:background="#EDEDED" />
+
+                            <EditText
+                                android:id="@+id/editText_informe_visitante"
+                                android:layout_width="match_parent"
+                                android:layout_height="127dp"
+                                android:ems="10"
+                                android:gravity="start|top"
+                                android:hint="Ingresa el informe del árbitro"
+                                android:inputType="textMultiLine" />
+
+                            <TextView
+                                android:id="@+id/textNombre5"
+                                android:layout_width="365dp"
+                                android:layout_height="40dp"
+
+                                android:gravity="center|left"
+                                android:text="ÁRBITRO"
+                                android:textColor="#000000"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/editText_nombre_arbitro"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="Ingrese nombre y apellido del árbitro"
+                                android:inputType="textPersonName" />
+
+                            <Button
+                                android:id="@+id/btn_registrar_estadisticas"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="#0C3667"
+                                android:text="Registrar" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/linear_camisetas"
+                            android:layout_width="365dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+</FrameLayout>

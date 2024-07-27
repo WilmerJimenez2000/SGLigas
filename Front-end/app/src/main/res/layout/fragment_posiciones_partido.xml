@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Torneos.Fragmento_Posiciones_Torneo.Fragment_posiciones_torneo">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="370dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:layout_margin="8dp"
+
+            android:background="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="105dp"
+                        android:layout_height="wrap_content"
+                        android:text="Equipo"
+                        android:textColor="#000000"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <Space
+                        android:layout_width="38dp"
+                        android:layout_height="10dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="14dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="PG"
+                        android:textColor="#000000"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="14dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="PE"
+                        android:textColor="#000000"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="14dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="GF"
+                        android:textColor="#000000"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="14dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="GC"
+                        android:textColor="#000000"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="14dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="DG"
+                        android:textColor="#000000"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="14dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pts"
+                        android:textColor="#000000"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="11dp" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:background="#EDEDED" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_equipos_clasificacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</FrameLayout>
