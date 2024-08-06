@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sgligas.Jugadores.Jugador
-
 import com.example.sgligas.R
 import com.example.sgligas.consultaBaseDeDatos
 import com.google.gson.Gson
@@ -28,26 +27,17 @@ import java.io.File
 import java.io.IOException
 import kotlin.properties.Delegates
 
-
-
-
 class Fragment_registrar_alineacion_partido : Fragment() {
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var imageView: ImageView
-
     private var jugadoresEquipoTL: MutableList<Jugador> = mutableListOf()
-    private var jugadoresEquipoTV : MutableList<Jugador> = mutableListOf()
+    private var jugadoresEquipoTV: MutableList<Jugador> = mutableListOf()
     lateinit var adapter: Adaptador_ingresar_alineacion
-
     private val listaDeJugadoresAlineacion: MutableList<JugadorAlineacion> = mutableListOf()
-
     private lateinit var nombre: String
     private lateinit var foto: String
     private var posicion by Delegates.notNull<Int>()
-
     private lateinit var guardarAlineacion: Button
-
     private var idPartidos by Delegates.notNull<Int>()
     private lateinit var nombreEquipoLocal: String
     private lateinit var escudoEquipoLocal: String
@@ -65,35 +55,23 @@ class Fragment_registrar_alineacion_partido : Fragment() {
     private lateinit var estado: String
     private var idTorneo by Delegates.notNull<Int>()
     private lateinit var numeroJornada: String
-
-
     private lateinit var linearLayoutRegistroA: LinearLayout
     private lateinit var linearLayoutNoRegistroA: LinearLayout
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view =
+            inflater.inflate(R.layout.fragment_registrar_alineacion_partido, container, false)
+        linearLayoutNoRegistroA = view.findViewById(R.id.LinearLayout_Primario_RAlineacion)
+        linearLayoutRegistroA = view.findViewById(R.id.LinearLayout_Secundario_RAlineacion)
 
 
-
-        val view=inflater.inflate(R.layout.fragment_registrar_alineacion_partido, container, false)
-        linearLayoutNoRegistroA=view.findViewById(R.id.LinearLayout_Primario_RAlineacion)
-        linearLayoutRegistroA=view.findViewById(R.id.LinearLayout_Secundario_RAlineacion)
-
-
-        recyclerView=view.findViewById(R.id.recyclerView_alineacion)
-        imageView= view.findViewById(R.id.myImageView)
-        guardarAlineacion=view.findViewById(R.id.btn_guardar_alineacion)
-
-
-
-
-
+        recyclerView = view.findViewById(R.id.recyclerView_alineacion)
+        imageView = view.findViewById(R.id.myImageView)
+        guardarAlineacion = view.findViewById(R.id.btn_guardar_alineacion)
         val informacionPartido = File(requireContext().filesDir, "cache_file.txt").readText()
 
-        Log.e("estoy en el fragmento ", "$informacionPartido")
 
 
         try {
@@ -115,80 +93,76 @@ class Fragment_registrar_alineacion_partido : Fragment() {
             veedor = json.getString("veedor")
             cancha = json.getString("cancha")
             idTorneo = json.getInt("idTorneo")
-            estado=json.getString("estado")
+            estado = json.getString("estado")
 
             recuperarInfoEquipoLocal(idEquipoLocal.toString())
             recuperarInfoEquipoVisitante(idEquipoVisitante.toString())
 
             recuperarAlineacionPartido(idPartidos.toString())
-
-
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
             Log.e("fragmento", "Error al parsear el JSON de partidos: $informacionPartido")
         }
-
-
-
-
-        val cantidadJugadores = 70 // Puedes ajustar este valor según sea necesario
+        val cantidadJugadores = 70
 
         listaDeJugadoresAlineacion.clear()
-
         val jugadoresLocales = (1..cantidadJugadores / 2).map {
-            listaDeJugadoresAlineacion.add(JugadorAlineacion("Jugador $it", "escudo$it","Local" ,"$nombreEquipoLocal" , "Invisible", "Si"/* Otros atributos */))
+            listaDeJugadoresAlineacion.add(
+                JugadorAlineacion(
+                    "Jugador $it",
+                    "escudo$it",
+                    "Local",
+                    "$nombreEquipoLocal",
+                    "Invisible",
+                    "Si"/* Otros atributos */
+                )
+            )
         }
-
         val jugadoresVisitantes = (cantidadJugadores / 2 + 1..cantidadJugadores).map {
-            listaDeJugadoresAlineacion.add(JugadorAlineacion("Jugador $it", "escudo$it", "Visitante","$nombreEquipoVisitante", "Invisible", "Si" /* Otros atributos */))
+            listaDeJugadoresAlineacion.add(
+                JugadorAlineacion(
+                    "Jugador $it",
+                    "escudo$it",
+                    "Visitante",
+                    "$nombreEquipoVisitante",
+                    "Invisible",
+                    "Si" /* Otros atributos */
+                )
+            )
         }
 
 
 
-        adapter = Adaptador_ingresar_alineacion(listaDeJugadoresAlineacion, object : Adaptador_ingresar_alineacion.OnItemClickListener {
-            override fun onItemClick(position: Int,jugador: JugadorAlineacion) {
+        adapter = Adaptador_ingresar_alineacion(
+            listaDeJugadoresAlineacion,
+            object : Adaptador_ingresar_alineacion.OnItemClickListener {
+                override fun onItemClick(position: Int, jugador: JugadorAlineacion) {
+                    mostrarDialogo(jugador)
+                    posicion = position
+                    // Captura el contenido del RecyclerView como un Bitmap
+                    val recyclerViewBitmap: Bitmap = captureRecyclerView(recyclerView)
+                    // Establece el Bitmap en el ImageView
+                    // imageView.setImageBitmap(recyclerViewBitmap)
+                }
+            })
 
-
-                mostrarDialogo(jugador)
-                posicion=position
-
-                // Captura el contenido del RecyclerView como un Bitmap
-                val recyclerViewBitmap: Bitmap = captureRecyclerView(recyclerView)
-
-                // Establece el Bitmap en el ImageView
-               // imageView.setImageBitmap(recyclerViewBitmap)
-            }
-        })
-
-        imageView.visibility= View.GONE
+        imageView.visibility = View.GONE
 
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 7) // 4 columnas
         recyclerView.adapter = adapter
-
-
         /// Guardar alineacion
-
-
         guardarAlineacion.setOnClickListener {
-
             for (jugador in listaDeJugadoresAlineacion) {
-                jugador.fondo="No"
+                jugador.fondo = "No"
             }
-
-            // Suponiendo que listaDeJugadoresAlineacion contiene tus datos
             val json = Gson().toJson(listaDeJugadoresAlineacion)
-
             val jsonObject = JSONObject()
             jsonObject.put("alineacion", json)
 
-            registrarAlineacion(idPartidos,jsonObject.toString())
+            registrarAlineacion(idPartidos, jsonObject.toString())
 
 
             adapter.notifyDataSetChanged()
-
-
-
-
         }
 
 
@@ -200,32 +174,26 @@ class Fragment_registrar_alineacion_partido : Fragment() {
         return view
     }
 
-
     // Función para capturar una imagen de un RecyclerView
     private fun captureRecyclerView(recyclerView: RecyclerView): Bitmap {
         // Crea un bitmap con el tamaño del RecyclerView
-        val bitmap = Bitmap.createBitmap(recyclerView.width, recyclerView.height, Bitmap.Config.ARGB_8888)
-
+        val bitmap =
+            Bitmap.createBitmap(recyclerView.width, recyclerView.height, Bitmap.Config.ARGB_8888)
         // Crea un lienzo para dibujar en el bitmap
         val canvas = Canvas(bitmap)
-
         // Dibuja el contenido del RecyclerView en el lienzo
         recyclerView.draw(canvas)
 
         return bitmap
     }
 
-    fun registrarAlineacion(idPartido: Int, alineacion: String){
-
-
+    fun registrarAlineacion(idPartido: Int, alineacion: String) {
         val url = consultaBaseDeDatos.obtenerURLConsulta("7_insertar_alineacion.php")
         val client = OkHttpClient()
-
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("id_partido", idPartido.toString())
             .addFormDataPart("alineacion", alineacion)
-
         val request = Request.Builder()
             .url(url)
             .post(requestBody.build())
@@ -233,43 +201,28 @@ class Fragment_registrar_alineacion_partido : Fragment() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                // Manejar la respuesta del servidor
                 if (response.isSuccessful) {
-                    // Éxito
                     val jsonData = response.body?.string()
-                    // Procesar la respuesta JSON si es necesario
 
-                    Log.e("Esto es lo que sale en la alineacion", "$jsonData")
 
                     activity?.runOnUiThread {
-
                         Toast.makeText(requireContext(), "Registro Existoso", Toast.LENGTH_SHORT)
                             .show()
 
                         requireActivity().onBackPressed()
-
-
-
-
                     }
-
-
                 } else {
-                    // Manejar errores en la respuesta HTTP
+                    // Se maneja los errores en la respuesta HTTP
+                    Log.e("Error HTTP", "Código: ${response.code}")
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+                // Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
             }
         })
-
-
-
-
     }
-
-
 
     fun mostrarDialogo(jugador: JugadorAlineacion) {
         val builder = AlertDialog.Builder(requireContext())
@@ -279,14 +232,12 @@ class Fragment_registrar_alineacion_partido : Fragment() {
         val view = layoutInflater.inflate(R.layout.dialogo_jugador_alineacion, null)
         val lista_jugadores_alineacion: Spinner =
             view.findViewById(R.id.spinner_jugadores_alineacion)
-
         val adapterTL = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
             jugadoresEquipoTL.map { it.nombre }
         )
         adapterTL.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
         val adapterTV = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
@@ -336,7 +287,6 @@ class Fragment_registrar_alineacion_partido : Fragment() {
             jugadorEnPosicion.nombre = nombre
             jugadorEnPosicion.escudo = foto
             jugadorEnPosicion.estado = "Visible"
-
             // Eliminar el jugador seleccionado de la lista original
             if (jugador.equipo == "Local") {
                 jugadoresEquipoTL.removeAt(lista_jugadores_alineacion.selectedItemPosition)
@@ -345,17 +295,14 @@ class Fragment_registrar_alineacion_partido : Fragment() {
                 jugadoresEquipoTV.removeAt(lista_jugadores_alineacion.selectedItemPosition)
                 adapterTV.notifyDataSetChanged()
             }
-
             // Notificar al adaptador de RecyclerView sobre el cambio
             adapter.notifyDataSetChanged()
         }
 
         builder.setNegativeButton("Cancelar") { _, _ -> }
-
         // Crear y mostrar el AlertDialog
         val alertDialog = builder.create()
         alertDialog.show()
-
         // Obtener los botones del AlertDialog y cambiar el color del texto
         val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
         val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
@@ -368,18 +315,13 @@ class Fragment_registrar_alineacion_partido : Fragment() {
         )
     }
 
-
-
     fun recuperarInfoEquipoLocal(idEquipo: String) {
-
         jugadoresEquipoTL.clear()
 
-        jugadoresEquipoTL.add(Jugador(0, "", "","", 0,0,"", ""))
-
+        jugadoresEquipoTL.add(Jugador(0, "", "", "", 0, 0, "", ""))
         val url = consultaBaseDeDatos.obtenerURLConsulta("5_mostrar_jugadores.php")
         val client = OkHttpClient()
         val requestBody = FormBody.Builder().add("id_equipo", idEquipo).build()
-
         val request = Request.Builder().url(url).post(requestBody).build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -392,8 +334,6 @@ class Fragment_registrar_alineacion_partido : Fragment() {
 
 
                         if (jsonObject.has("datos")) {
-
-
                             try {
                                 val jsonParser = JsonParser()
                                 val json: JsonObject = jsonParser.parse(jsonData).asJsonObject
@@ -401,12 +341,9 @@ class Fragment_registrar_alineacion_partido : Fragment() {
 
                                 if (json.has("datos")) {
                                     val datosArray = json.getAsJsonArray("datos")
-
                                     // Trabaja con el array de datos
                                     for (jugadorEVisitante in datosArray) {
-
-                                        val jugador= JSONObject(jugadorEVisitante.toString())
-
+                                        val jugador = JSONObject(jugadorEVisitante.toString())
                                         val CI = jugador.getInt("CI")
                                         val nombre = jugador.getString("nombre")
                                         val posicion = jugador.getString("posicion")
@@ -415,60 +352,55 @@ class Fragment_registrar_alineacion_partido : Fragment() {
                                         val estatura = jugador.getInt("estatura")
                                         val estado = jugador.getString("estado")
                                         val foto = jugador.getString("foto")
+                                        val objetoJugador = Jugador(
+                                            CI,
+                                            nombre,
+                                            posicion,
+                                            fecha_nacimiento,
+                                            id_equipo,
+                                            estatura,
+                                            estado,
+                                            foto
+                                        )
 
 
-                                        val objetoJugador= Jugador(CI, nombre, posicion, fecha_nacimiento, id_equipo,estatura, estado,foto)
-
-
-                                        jugadoresEquipoTL .add(objetoJugador)
-
-
-
-
+                                        jugadoresEquipoTL.add(objetoJugador)
                                     }
-
                                 }
-
-
-
                             } catch (e: JsonSyntaxException) {
                                 e.printStackTrace()
                                 Log.e("fragmento", "Error al parsear el JSON de partidos")
                             }
-
                         } else {
-                            // Manejar el caso donde "datos" no está presente en la respuesta
+                            // Se maneja el caso donde "datos" no está presente en la respuesta
+                            Log.e("fragmento", "No hay datos en la respuesta")
+
                         }
                     } catch (e: JSONException) {
                         e.printStackTrace()
+                        Log.e("", "Error al parsear el JSON")
 
                     }
                 } else {
-                    // Manejar errores en la respuesta HTTP
+                    // Se maneja los errores en la respuesta HTTP
+                    Log.e("Error HTTP", "Código: ${response.code}")
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+                // Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
             }
         })
-
-
     }
-
-
 
     fun recuperarInfoEquipoVisitante(idEquipo: String) {
-
         jugadoresEquipoTV.clear()
 
-        jugadoresEquipoTV.add(Jugador(0, "", "","", 0,0,"", ""))
-
-
+        jugadoresEquipoTV.add(Jugador(0, "", "", "", 0, 0, "", ""))
         val url = consultaBaseDeDatos.obtenerURLConsulta("5_mostrar_jugadores.php")
         val client = OkHttpClient()
         val requestBody = FormBody.Builder().add("id_equipo", idEquipo).build()
-
         val request = Request.Builder().url(url).post(requestBody).build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -481,8 +413,6 @@ class Fragment_registrar_alineacion_partido : Fragment() {
 
 
                         if (jsonObject.has("datos")) {
-
-
                             try {
                                 val jsonParser = JsonParser()
                                 val json: JsonObject = jsonParser.parse(jsonData).asJsonObject
@@ -490,12 +420,8 @@ class Fragment_registrar_alineacion_partido : Fragment() {
 
                                 if (json.has("datos")) {
                                     val datosArray = json.getAsJsonArray("datos")
-
-                                    // Trabaja con el array de datos
                                     for (jugadorEVisitante in datosArray) {
-
-                                        val jugador= JSONObject(jugadorEVisitante.toString())
-
+                                        val jugador = JSONObject(jugadorEVisitante.toString())
                                         val CI = jugador.getInt("CI")
                                         val nombre = jugador.getString("nombre")
                                         val posicion = jugador.getString("posicion")
@@ -504,82 +430,52 @@ class Fragment_registrar_alineacion_partido : Fragment() {
                                         val estatura = jugador.getInt("estatura")
                                         val estado = jugador.getString("estado")
                                         val foto = jugador.getString("foto")
+                                        val objetoJugador = Jugador(
+                                            CI,
+                                            nombre,
+                                            posicion,
+                                            fecha_nacimiento,
+                                            id_equipo,
+                                            estatura,
+                                            estado,
+                                            foto
+                                        )
 
 
-                                        val objetoJugador= Jugador(CI, nombre, posicion, fecha_nacimiento, id_equipo,estatura, estado,foto)
-
-
-                                        jugadoresEquipoTV .add(objetoJugador)
-
-
-
-
+                                        jugadoresEquipoTV.add(objetoJugador)
                                     }
-
                                 }
-
-
-
                             } catch (e: JsonSyntaxException) {
                                 e.printStackTrace()
                                 Log.e("fragmento", "Error al parsear el JSON de partidos")
                             }
-
                         } else {
                             // Manejar el caso donde "datos" no está presente en la respuesta
                         }
                     } catch (e: JSONException) {
                         e.printStackTrace()
-
                     }
                 } else {
-                    // Manejar errores en la respuesta HTTP
+
+                    // Se maneja los errores en la respuesta HTTP
+                    Log.e("Error HTTP", "Código: ${response.code}")
+
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+                // Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
             }
         })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
-
-    fun recuperarAlineacionPartido(idPartido: String){
-
-
+    fun recuperarAlineacionPartido(idPartido: String) {
         val url = consultaBaseDeDatos.obtenerURLConsulta("7_mostrar_alineacion.php")
-
         val client = OkHttpClient()
-
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("id_partido", idPartido)
-
-
-
-
-
-
         val request = Request.Builder()
             .url(url)
             .post(requestBody.build())
@@ -587,11 +483,8 @@ class Fragment_registrar_alineacion_partido : Fragment() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                // Manejar la respuesta del servidor
                 val jsonData = response.body?.string()
 
-
-                Log.e("esto es lo que se tiene la alinacion", "$jsonData")
 
 
                 try {
@@ -600,134 +493,26 @@ class Fragment_registrar_alineacion_partido : Fragment() {
 
 
                     if (jsonObject.has("datos")) {
-
-
                         Log.e("si hay datos ########", "")
 
                         activity?.runOnUiThread {
-
                             linearLayoutRegistroA.visibility = View.VISIBLE
                             linearLayoutNoRegistroA.visibility = View.INVISIBLE
-
                         }
-
-
-
-
-
-
-
                     } else {
                         Log.e("No ", "tiene datos")
-
-
-
-
-                            /*LinearLayoutPrimario.visibility = View.GONE
-                            LinearLayoutSecundario.visibility = View.VISIBLE*/
-
-
-
 
                     }
                 } catch (e: JSONException) {
                     e.printStackTrace()
-
                 }
-
-
-
-
-                /*try {
-                    val jsonObject = JSONObject(jsonData.toString())
-
-
-
-                    if (jsonObject.has("datos")) {
-
-
-                        // Suponiendo que tienes el JSON almacenado en un String llamado jsonString
-                        val jsonObject = JSONObject(jsonData)
-                        val alineacionJson = jsonObject.getString("datos") // Obtiene el JSON de la alineación
-
-                        Log.e("esto es lo que se tiene la alineacciooooooooooooooon", "$alineacionJson")
-
-
-                        // Deserializa la cadena JSON de la alineación a una lista de objetos JugadorAlineacion
-                        val listaDeJugadoresAlineacionRecuperada: MutableList<JugadorAlineacion> = Gson().fromJson(
-                            alineacionJson, object : TypeToken<List<JugadorAlineacion>>() {}.type
-                        )
-
-
-
-
-                        activity?.runOnUiThread {
-
-                            adapter = Adaptador_ingresar_alineacion(
-                                listaDeJugadoresAlineacionRecuperada,
-                                object : Adaptador_ingresar_alineacion.OnItemClickListener {
-                                    override fun onItemClick(
-                                        position: Int,
-                                        jugador: JugadorAlineacion
-                                    ) {
-                                        // Lógica para manejar clics en elementos del adaptador
-                                    }
-                                })
-
-                            recyclerView.layoutManager =
-                                GridLayoutManager(requireContext(), 7) // 4 columnas
-                            recyclerView.adapter = adapter
-
-
-                        }
-
-
-
-
-
-                    } else {
-                        Log.e("No ", "tiene datos")
-
-                        activity?.runOnUiThread {
-
-
-                            LinearLayoutPrimario.visibility = View.GONE
-                            LinearLayoutSecundario.visibility = View.VISIBLE
-
-                        }
-
-
-                    }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-
-                }*/
-
-
-
-
-
-
-
 
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+                // Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
             }
         })
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
 }

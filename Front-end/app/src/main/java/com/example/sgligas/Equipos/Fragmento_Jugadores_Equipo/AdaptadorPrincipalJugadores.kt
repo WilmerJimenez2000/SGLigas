@@ -23,7 +23,6 @@ class AdaptadorPrincipalJugadores(
     private val tarjetasPosicionJugador: List<Tarjeta_posicion_jugador>,
     private val context: Context
 ) : RecyclerView.Adapter<AdaptadorPrincipalJugadores.ViewHolder>() {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             LayoutInflater.from(parent.context)
@@ -35,22 +34,14 @@ class AdaptadorPrincipalJugadores(
         val tarjetaPosicionJugador = tarjetasPosicionJugador[position]
         holder.posicionTextView.text = tarjetaPosicionJugador.posicion
 
-        Log.e("este es la posicion de la tarjeta", "${tarjetaPosicionJugador.posicion}")
 
         if (tarjetaPosicionJugador.posicion == "PORTERO") {
-
             holder.imageView_Goles.setImageResource(R.drawable.icono_goles_recibidos)
-
-
         }
-
-
         val adaptador2 = AdaptadorSecundarioJugadores(
             tarjetaPosicionJugador.jugadores,
             object : AdaptadorSecundarioJugadores.OnItemClickListener {
                 override fun onItemClick(jugador: EstadisticaJugador) {
-
-
                     val infoJugador = File(context.filesDir, "cache_JEquipo.txt").readText()
 
 
@@ -62,12 +53,8 @@ class AdaptadorPrincipalJugadores(
                             val jugadoresElement = json.getAsJsonArray("datos")
 
                             for (element in jugadoresElement) {
-
-
                                 val json = JSONObject(element.toString())
-
                                 val CI = json.getInt("CI")
-
                                 val nombre = json.getString("nombre")
                                 val posicion = json.getString("posicion")
                                 val fechaNacimiento = json.getString("fecha_nacimiento")
@@ -78,11 +65,8 @@ class AdaptadorPrincipalJugadores(
 
 
                                 if (CI == jugador.CI) {
-
-
                                     irActividad(
                                         InformacionJugador::class.java,
-
                                         CI,
                                         nombre,
                                         fechaNacimiento,
@@ -98,22 +82,12 @@ class AdaptadorPrincipalJugadores(
                                         jugador.goles,
                                         jugador.goles_recibidos,
                                         jugador.autogoles
-
-
                                     )
-
-
                                 }
-
-
                             }
-
-
-// Aquí puedes hacer lo que necesites con listaPartidos
                         } else {
                             Log.e("fragmento", "'partidos' no está presente en la respuesta")
                         }
-
                     } catch (e: JsonSyntaxException) {
                         e.printStackTrace()
                         Log.e(
@@ -121,8 +95,6 @@ class AdaptadorPrincipalJugadores(
                             "Error al parsear el JSON de informacion Jugador: $infoJugador"
                         )
                     }
-
-
                 }
             }
         )
@@ -153,18 +125,13 @@ class AdaptadorPrincipalJugadores(
         estado: String,
         estatura: Int,
         idEquipo: Int,
-
         pj: Int,
         rojas: Int,
         amarillas: Int,
         goles: Int,
         goles_recibidos: Int,
         autogoles: Int
-
-
     ) {
-
-
         val intent = Intent(context, clase)
         intent.putExtra("CI", CI)
         intent.putExtra("nombre_jugador", nombreJugador)
@@ -184,6 +151,4 @@ class AdaptadorPrincipalJugadores(
 
         context.startActivity(intent)
     }
-
-
 }

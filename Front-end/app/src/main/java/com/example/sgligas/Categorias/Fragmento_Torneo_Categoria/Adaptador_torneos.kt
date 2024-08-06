@@ -8,30 +8,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sgligas.R
 import com.example.sgligas.Torneos.Torneo
 
-class Adaptador_torneos (private val torneos: List<Torneo>,
-                         private val itemClickListener: OnItemClickListener
-): RecyclerView.Adapter<Adaptador_torneos.TorneoViewHolder>() {
-
-    interface OnItemClickListener{
-        fun onItemClick(torneo : Torneo)
+class Adaptador_torneos(
+    private val torneos: List<Torneo>,
+    private val itemClickListener: OnItemClickListener
+) : RecyclerView.Adapter<Adaptador_torneos.TorneoViewHolder>() {
+    interface OnItemClickListener {
+        fun onItemClick(torneo: Torneo)
     }
 
-    class TorneoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class TorneoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val etapaTorneo: TextView = itemView.findViewById(R.id.textView_etapa_torneo)
+        fun bind(torneo: Torneo, itemClickListener: OnItemClickListener) {
+            etapaTorneo.text = "${torneo.etapa}"
 
-        fun bind(torneo: Torneo, itemClickListener : OnItemClickListener){
-
-            etapaTorneo.text="${torneo.etapa}"
-
-            itemView.setOnClickListener{
+            itemView.setOnClickListener {
                 itemClickListener.onItemClick(torneo)
             }
-
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TorneoViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_torneo, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_torneo, parent, false)
         return TorneoViewHolder(itemView)
     }
 
@@ -40,11 +38,7 @@ class Adaptador_torneos (private val torneos: List<Torneo>,
         holder.bind(torneo, itemClickListener)
     }
 
-    override fun getItemCount(): Int{
+    override fun getItemCount(): Int {
         return torneos.size
     }
-
-
-
-
 }

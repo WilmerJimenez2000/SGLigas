@@ -14,12 +14,9 @@ import okhttp3.*
 import java.io.IOException
 
 class CambiarContrasena : AppCompatActivity() {
-
     private lateinit var contrasena1: EditText
     private lateinit var contrasena2: EditText
-
     private var correoUsuario: String = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cambiar_contrasena)
@@ -28,12 +25,10 @@ class CambiarContrasena : AppCompatActivity() {
         contrasena2 = findViewById(R.id.edtClave2)
 
         correoUsuario = intent.getStringExtra("correoUsuario") ?: ""
-
         val imgreturn: ImageView = findViewById(R.id.imgreturn2)
         imgreturn.setOnClickListener {
             irActividad(MainActivity::class.java)
         }
-
         val cambiar: Button = findViewById(R.id.btnCambiar)
         cambiar.setOnClickListener {
             validarContraseñas()
@@ -45,12 +40,17 @@ class CambiarContrasena : AppCompatActivity() {
         val clave2 = contrasena2.text.toString()
 
         if (clave1.isEmpty() || clave2.isEmpty()) {
-            Toast.makeText(this, "Las contraseñas no pueden estar vacías", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Las contraseñas no pueden estar vacías", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
         if (clave1.length < 8 || clave2.length < 8) {
-            Toast.makeText(this, "Las contraseñas deben tener al menos 8 dígitos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Las contraseñas deben tener al menos 8 dígitos",
+                Toast.LENGTH_SHORT
+            ).show()
             limpiarCampos()
             return
         }
@@ -71,16 +71,12 @@ class CambiarContrasena : AppCompatActivity() {
     }
 
     private fun cambiarContraseña(correo: String, nuevaContraseña: String) {
-
-        val url= consultaBaseDeDatos.obtenerURLConsulta("cambiar_contrasena.php")
-
+        val url = consultaBaseDeDatos.obtenerURLConsulta("cambiar_contrasena.php")
         val client = OkHttpClient()
-
         val formBody = FormBody.Builder()
             .add("correo", correo)
             .add("contrasena", nuevaContraseña)
             .build()
-
         val request = Request.Builder()
             .url(url)
             .post(formBody)
@@ -89,7 +85,11 @@ class CambiarContrasena : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    Toast.makeText(applicationContext, "Error en la solicitud HTTP", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext,
+                        "Error en la solicitud HTTP",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -99,10 +99,18 @@ class CambiarContrasena : AppCompatActivity() {
 
                 runOnUiThread {
                     if (response.isSuccessful) {
-                        Toast.makeText(applicationContext, "Contraseña cambiada correctamente. Por favor inicie sesión", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            applicationContext,
+                            "Contraseña cambiada correctamente. Por favor inicie sesión",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         irActividad(Login::class.java)
                     } else {
-                        Toast.makeText(applicationContext, "Error al cambiar la contraseña", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            applicationContext,
+                            "Error al cambiar la contraseña",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }

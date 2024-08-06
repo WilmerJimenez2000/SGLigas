@@ -25,17 +25,11 @@ import java.io.IOException
 import kotlin.properties.Delegates
 import java.util.concurrent.TimeUnit
 
-
-
 class Fragment_registrar_estadisticas : Fragment() {
-
     private lateinit var escudoLocal: ImageView
     private lateinit var escudoVisitante: ImageView
-
     private lateinit var lista_jugadores_T_L: Spinner
     private lateinit var lista_jugadores_T_V: Spinner
-
-
     private var idPartidos by Delegates.notNull<Int>()
     private lateinit var nombreEquipoLocal: String
     private lateinit var escudoEquipoLocal: String
@@ -51,66 +45,42 @@ class Fragment_registrar_estadisticas : Fragment() {
     private lateinit var veedor: String
     private lateinit var cancha: String
     private lateinit var estado: String
-
     private var idTorneo by Delegates.notNull<Int>()
     private lateinit var numeroJornada: String
-
     private var estadisticasJugadoresSeleccionados = ArrayList<EstadisticaJugador>()
     private lateinit var recyclerViewJugadores: RecyclerView
     private lateinit var adapter: AdaptadorJugadorEstadistica
     private var jugadoresEquipoTL: MutableList<Jugador> = mutableListOf()
     private var jugadoresEquipoTV: MutableList<Jugador> = mutableListOf()
-
     private lateinit var boton_registrar: Button
-
     private var jugadores: MutableList<EstadisticaJugador> = mutableListOf()
     private var jugadoresAIngresarEstadisticas: MutableList<MutableList<Int>> = mutableListOf()
-
-
     private var validacion: Boolean = true
-
-
     private lateinit var NGoles: String
     private lateinit var NGolesRecibidos: String
-
     private lateinit var LinearLayoutPrincipal: LinearLayout
     private lateinit var LinearLayoutSecundaria: LinearLayout
-
     private lateinit var textoInformeEquipoLocal: EditText
     private lateinit var textoInformeEquipoVisitante: EditText
     private lateinit var nombreArbitro: EditText
-
     private lateinit var ingresarJugadoresTitulares: Button
     private lateinit var jugadoresSeleccionadosTL: List<Jugador>
     private lateinit var jugadoresSeleccionadosTV: List<Jugador>
-
-
     private lateinit var scrollViewTL: ScrollView
     private lateinit var checkBoxJugadoresTL: MutableList<CheckBox>
-
     private lateinit var scrollViewTV: ScrollView
     private lateinit var checkBoxJugadoresTV: MutableList<CheckBox>
-
     private lateinit var escudoLocal2: ImageView
     private lateinit var escudoVisitante2: ImageView
-
     private lateinit var linearLayoutRegistrarEstadisticas: LinearLayout
-
     private lateinit var mensajeIngreseJT: TextView
-
     private var savingSnackbar: Snackbar? = null
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_registrar_estadisticas, container, false)
-
-        // Inflate the layout for this fragment
-
         recuperarInfoEquipoLocal()
         recuperarInfoEquipoVisitante()
 
@@ -122,22 +92,17 @@ class Fragment_registrar_estadisticas : Fragment() {
         textoInformeEquipoLocal = view.findViewById(R.id.editText_informe_local)
         textoInformeEquipoVisitante = view.findViewById(R.id.editText_informe_visitante)
         nombreArbitro = view.findViewById(R.id.editText_nombre_arbitro)
-        ingresarJugadoresTitulares= view.findViewById(R.id.btn_ingresar_jugadores_titulares)
+        ingresarJugadoresTitulares = view.findViewById(R.id.btn_ingresar_jugadores_titulares)
 
-        linearLayoutRegistrarEstadisticas= view.findViewById(R.id.LInearLayoutRegistrarEstadisticas)
+        linearLayoutRegistrarEstadisticas =
+            view.findViewById(R.id.LInearLayoutRegistrarEstadisticas)
 
-        mensajeIngreseJT=view.findViewById(R.id.textView_mensaje)
+        mensajeIngreseJT = view.findViewById(R.id.textView_mensaje)
 
 
         ingresarJugadoresTitulares.setOnClickListener {
-
             mostrarDialogoJugadoresTitulares()
         }
-
-
-
-
-
         val informacionPartido = File(requireContext().filesDir, "cache_file.txt").readText()
 
 
@@ -162,8 +127,6 @@ class Fragment_registrar_estadisticas : Fragment() {
             cancha = json.getString("cancha")
             idTorneo = json.getInt("idTorneo")
             estado = json.getString("estado")
-
-
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
             Log.e("fragmento", "Error al parsear el JSON de partidos: $informacionPartido")
@@ -184,7 +147,6 @@ class Fragment_registrar_estadisticas : Fragment() {
         return view
     }
 
-
     override fun onResume() {
         super.onResume()
 
@@ -196,18 +158,15 @@ class Fragment_registrar_estadisticas : Fragment() {
 
 
         boton_registrar.setOnClickListener {
-
             jugadoresSeleccionadosTL = jugadoresSeleccionadosTL.drop(1)
             jugadoresSeleccionadosTV = jugadoresSeleccionadosTV.drop(1)
-
             val listaCombinadaJT = jugadoresSeleccionadosTL + jugadoresSeleccionadosTV
 
             jugadoresAIngresarEstadisticas.clear()
 
 
 
-            for( jugadorCombinadaJT  in listaCombinadaJT){
-
+            for (jugadorCombinadaJT in listaCombinadaJT) {
                 Log.e(
                     "EstadisticasJugador",
                     "CI: ${jugadorCombinadaJT.CI} "
@@ -221,21 +180,21 @@ class Fragment_registrar_estadisticas : Fragment() {
                         0,
                         0,
                         0
-
                     )
                 )
-
-
             }
 
 
 
             for (jugador in jugadores) {
-
                 // CI del jugador a modificar y nuevas estadísticas
-
-                val nuevasEstadisticas = listOf(jugador.rojas, jugador.amarillas, jugador.goles, jugador.goles_recibidos, jugador.autogoles)
-
+                val nuevasEstadisticas = listOf(
+                    jugador.rojas,
+                    jugador.amarillas,
+                    jugador.goles,
+                    jugador.goles_recibidos,
+                    jugador.autogoles
+                )
                 // Modificar el jugador con el CI dado
                 for (jugadorT in jugadoresAIngresarEstadisticas) {
                     if (jugadorT[0] == jugador.CI) {
@@ -245,31 +204,21 @@ class Fragment_registrar_estadisticas : Fragment() {
                         break
                     }
                 }
-
-
-
             }
 
 
             for (jugador in jugadoresAIngresarEstadisticas) {
                 println("CI: ${jugador[0]}, Rojas: ${jugador[1]}, Amarillas: ${jugador[2]}, Goles: ${jugador[3]}, Goles recibidos: ${jugador[4]}, Autogoles: ${jugador[5]}")
             }
-
             val informeEquipoLocal = textoInformeEquipoLocal.text.toString().trim()
-
             val informeEquipoVisitante = textoInformeEquipoVisitante.text.toString().trim()
-
             val nombreDelArbitro = nombreArbitro.text.toString().trim()
 
 
             if (informeEquipoLocal.isEmpty() || informeEquipoVisitante.isEmpty()) {
-
-
                 mostrarMensaje("Por favor ingresa los informes de los equipos")
-
             } else if (nombreDelArbitro.isEmpty()) {
                 mostrarMensaje("Por favor ingresa el nombre del árbitro")
-
             } else {
                 registrarEstadísticasJugadores(
                     idTorneo.toString(),
@@ -284,55 +233,35 @@ class Fragment_registrar_estadisticas : Fragment() {
                     nombreDelArbitro
                 )
             }
-
-
         }
-
-
-
     }
-
 
     fun mostrarMensaje(mensaje: String) {
-        // Aquí puedes mostrar el mensaje de la manera que prefieras,
-        // por ejemplo, usando un AlertDialog o un Toast.
         Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
     }
-
 
     fun mostrarDialogo(jugadorSeleccionado: Jugador) {
         val builder = AlertDialog.Builder(requireContext())
         val nombre_Jugador = jugadorSeleccionado.nombre
         builder.setTitle("$nombre_Jugador")
         val view = layoutInflater.inflate(R.layout.dialogo_jugador_estadisticas, null)
-
-        // Obtener referencias a los EditText en el diálogo personalizado
         val numeroAmarillas = view.findViewById<EditText>(R.id.numero_amarillas)
         val numeroRojas = view.findViewById<EditText>(R.id.numero_rojas)
-
         val numeroGoles = view.findViewById<EditText>(R.id.numero_goles)
-
         val numeroAutogoles = view.findViewById<EditText>(R.id.numero_autogoles)
-
         val numeroGRecibidos = view.findViewById<EditText>(R.id.numero_goles_recibidos)
-
         val layoutGoles = view.findViewById<LinearLayout>(R.id.layout_goles)
         val layoutGoleRecibidos = view.findViewById<LinearLayout>(R.id.layout_goles_recibidos)
-
         val spaceGol = view.findViewById<Space>(R.id.space_gol)
         val spaceGolRecibidos = view.findViewById<Space>(R.id.space_gol_recibidos)
 
 
         if (jugadorSeleccionado.posicion == "Portero") {
-
             layoutGoles.visibility = View.GONE
             spaceGol.visibility = View.GONE
         } else {
-
             layoutGoleRecibidos.visibility = View.GONE
             spaceGolRecibidos.visibility = View.GONE
-
-
         }
 
 
@@ -341,24 +270,17 @@ class Fragment_registrar_estadisticas : Fragment() {
         builder.setPositiveButton("Guardar") { dialog, _ ->
             val NAmarillas = numeroAmarillas.text.toString()
             val NRojas = numeroRojas.text.toString()
-
             val NAutogoles = numeroAutogoles.text.toString()
-
-
             //////
-
             if (jugadorSeleccionado.posicion == "Portero") {
                 NGolesRecibidos = numeroGRecibidos.text.toString()
                 NGoles = "0"
 
                 validacion = validarCampos(NAmarillas, NRojas, NAutogoles, NGolesRecibidos)
-
-
             } else {
                 NGoles = numeroGoles.text.toString()
                 NGolesRecibidos = "0"
                 validacion = validarCampos(NAmarillas, NRojas, NAutogoles, NGoles)
-
             }
 
 
@@ -366,12 +288,8 @@ class Fragment_registrar_estadisticas : Fragment() {
 
 
             if (!validacion) {
-                // Muestra un mensaje de error indicando que todos los campos deben estar llenos
                 mostrarMensaje("Todos los campos deben estar llenos")
-                // No cierres la ventana de diálogo automáticamente
-
             } else {
-
                 val jugadorEstadistica = EstadisticaJugador(
                     jugadorSeleccionado.nombre,
                     jugadorSeleccionado.CI,
@@ -392,14 +310,12 @@ class Fragment_registrar_estadisticas : Fragment() {
                     estadisticasJugadoresSeleccionados,
                     object : AdaptadorJugadorEstadistica.OnItemClickListener {
                         override fun onItemClick(estadisticaJugador: EstadisticaJugador) {
-                            // Aquí puedes manejar el clic en el elemento de la lista
-                            // Por ejemplo, abrir otra actividad con información detallada del jugador
-
+                            // Aqui se puede manejar el clic en el elemento de la lista
 
                         }
 
                         override fun onItemDeleteClick(position: Int) {
-                            // Aquí manejas la eliminación del jugador en la posición indicada
+                            // Aquí se maneja la eliminación del jugador en la posición indicada
                             adapter.eliminarJugador(position)
                             jugadores = adapter.obtenerListaJugadoresSeleccionados()
 
@@ -409,11 +325,7 @@ class Fragment_registrar_estadisticas : Fragment() {
                                     "Nombre: ${jugador.nombreJ}, TA: ${jugador.amarillas}, TR: ${jugador.rojas}, Goles: ${jugador.goles}, Autogoles: ${jugador.autogoles}"
                                 )
                             }
-
-
                         }
-
-
                     })
 
 
@@ -432,11 +344,9 @@ class Fragment_registrar_estadisticas : Fragment() {
                 recyclerViewJugadores.adapter = adapter
                 recyclerViewJugadores.layoutManager = LinearLayoutManager(requireContext())
             }
-
             // Posicionar el Spinner en el primer jugador después de aceptar
             lista_jugadores_T_L.setSelection(0)
             lista_jugadores_T_V.setSelection(0)
-
         }
 
 
@@ -446,33 +356,23 @@ class Fragment_registrar_estadisticas : Fragment() {
             lista_jugadores_T_L.setSelection(0)
             lista_jugadores_T_V.setSelection(0)
         }
-
-        // Crear el AlertDialog
         val alertDialog = builder.create()
-
-        // Mostrar el AlertDialog
         alertDialog.show()
-
-
-        // Obtener los botones del AlertDialog
         val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
         val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-
-        // Cambiar el color del texto de los botones
         positiveButton.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.textoColorDialogo
             )
-        ) // Cambia R.color.textColor al color que desees
+        )
         negativeButton.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.textoColorDialogo
             )
-        ) // Cambia R.color.textColor al color que desees
+        )
     }
-
 
     fun mostrarDialogoJugadoresTitulares() {
         val builder = AlertDialog.Builder(requireContext())
@@ -485,8 +385,7 @@ class Fragment_registrar_estadisticas : Fragment() {
         scrollViewTL = view.findViewById(R.id.scrollView_jugadoresTL)
         checkBoxJugadoresTL = mutableListOf()
         val linearLayoutJugadoresTL: LinearLayout = view.findViewById(R.id.linearLayout_jugadoresTL)
-
-        // Agrega CheckBox para cada jugador
+        // Se agrega el CheckBox para cada jugador
         for ((index, jugador) in jugadoresEquipoTL.withIndex()) {
             val checkBox = CheckBox(requireContext())
             checkBox.text = jugador.nombre
@@ -494,9 +393,9 @@ class Fragment_registrar_estadisticas : Fragment() {
             checkBoxJugadoresTL.add(checkBox)
             linearLayoutJugadoresTL.addView(checkBox)
         }
-
-        // Obtén el ColorStateList desde el recurso
-        val colorStateListL = ContextCompat.getColorStateList(requireContext(), R.color.checkbox_color_selector)
+        // Se obtiene el ColorStateList desde el recurso
+        val colorStateListL =
+            ContextCompat.getColorStateList(requireContext(), R.color.checkbox_color_selector)
         checkBoxJugadoresTL.forEach { checkBox ->
             checkBox.buttonTintList = colorStateListL
         }
@@ -504,8 +403,7 @@ class Fragment_registrar_estadisticas : Fragment() {
         scrollViewTV = view.findViewById(R.id.scrollView_jugadoresTV)
         checkBoxJugadoresTV = mutableListOf()
         val linearLayoutJugadoresTV: LinearLayout = view.findViewById(R.id.linearLayout_jugadoresTV)
-
-        // Agrega CheckBox para cada jugador
+        // Se agrega el CheckBox para cada jugador
         for ((index, jugador) in jugadoresEquipoTV.withIndex()) {
             val checkBox = CheckBox(requireContext())
             checkBox.text = jugador.nombre
@@ -513,9 +411,9 @@ class Fragment_registrar_estadisticas : Fragment() {
             checkBoxJugadoresTV.add(checkBox)
             linearLayoutJugadoresTV.addView(checkBox)
         }
-
-        // Obtén el ColorStateList desde el recurso
-        val colorStateListV = ContextCompat.getColorStateList(requireContext(), R.color.checkbox_color_selector)
+        // Se obtiene el ColorStateList desde el recurso
+        val colorStateListV =
+            ContextCompat.getColorStateList(requireContext(), R.color.checkbox_color_selector)
         checkBoxJugadoresTV.forEach { checkBox ->
             checkBox.buttonTintList = colorStateListV
         }
@@ -525,19 +423,14 @@ class Fragment_registrar_estadisticas : Fragment() {
         builder.setView(view)
         builder.setPositiveButton("Guardar", null)
         builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.dismiss() }
-
-        // Crear el AlertDialog
         val alertDialog = builder.create()
-
-        // Mostrar el AlertDialog
         alertDialog.show()
-
-        // Obtener el botón positivo del AlertDialog
         val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
         positiveButton.setOnClickListener {
-            jugadoresSeleccionadosTL = obtenerJugadoresSeleccionados(checkBoxJugadoresTL, jugadoresEquipoTL)
-            jugadoresSeleccionadosTV = obtenerJugadoresSeleccionados(checkBoxJugadoresTV, jugadoresEquipoTV)
-
+            jugadoresSeleccionadosTL =
+                obtenerJugadoresSeleccionados(checkBoxJugadoresTL, jugadoresEquipoTL)
+            jugadoresSeleccionadosTV =
+                obtenerJugadoresSeleccionados(checkBoxJugadoresTV, jugadoresEquipoTV)
             // Validación del número mínimo de jugadores
             if (jugadoresSeleccionadosTL.size < 8) {
                 mostrarMensaje("El equipo ${nombreEquipoLocal} no tiene el número mínimo de jugadores.")
@@ -546,7 +439,11 @@ class Fragment_registrar_estadisticas : Fragment() {
             } else {
                 cargarJugadoresTitularesParaEstadisticas()
 
-                Toast.makeText(requireContext(), "Registre las estadísticas de los jugadores titulares", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Registre las estadísticas de los jugadores titulares",
+                    Toast.LENGTH_SHORT
+                ).show()
 
                 linearLayoutRegistrarEstadisticas.visibility = View.VISIBLE
                 mensajeIngreseJT.visibility = View.GONE
@@ -554,11 +451,19 @@ class Fragment_registrar_estadisticas : Fragment() {
                 alertDialog.dismiss()
             }
         }
-
-        // Cambiar el color del texto de los botones
-        positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.textoColorDialogo))
+        positiveButton.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.textoColorDialogo
+            )
+        )
         val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-        negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.textoColorDialogo))
+        negativeButton.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.textoColorDialogo
+            )
+        )
     }
 
     private fun guardarInformesDeSansciones(
@@ -567,20 +472,14 @@ class Fragment_registrar_estadisticas : Fragment() {
         informeEquipoVisitante: String,
         nombreDelArbitro: String
     ) {
-
-
         val url = consultaBaseDeDatos.obtenerURLConsulta("8_insertar_sancion_informe.php")
-
         val client = OkHttpClient()
-
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("id_partido", idPartido)
             .addFormDataPart("informe_local", informeEquipoLocal)
             .addFormDataPart("informe_visitante", informeEquipoVisitante)
             .addFormDataPart("arbitro", nombreDelArbitro)
-
-
         val request = Request.Builder()
             .url(url)
             .post(requestBody.build())
@@ -588,28 +487,23 @@ class Fragment_registrar_estadisticas : Fragment() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                // Manejar la respuesta del servidor
                 if (response.isSuccessful) {
-                    // Éxito
                     val jsonData = response.body?.string()
-                    // Procesar la respuesta JSON si es necesario
-
-                    Log.e("estes es lo que sale eeeeeeeeeeeeeee guardar informes ", "$jsonData")
-
 
                 } else {
-                    // Manejar errores en la respuesta HTTP
+
+                    // Se maneja los errores en la respuesta HTTP
+                    Log.e("Error HTTP", "Código: ${response.code}")
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+                // Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
+
             }
         })
-
     }
-
-
 
     private fun comprobaciónRegistroEstadisticas() {
         val fileName = "cache_ComEst.txt"
@@ -620,57 +514,48 @@ class Fragment_registrar_estadisticas : Fragment() {
                 val fileContent = filePath.readText()
                 val jsonObject = JSONObject(fileContent)
                 val existenRegistros = jsonObject.getBoolean("existen_registros")
-
-                // Usa el valor booleano directamente aquí
+                // Se usa el valor booleano directamente aquí
                 if (existenRegistros) {
-
                     LinearLayoutPrincipal.visibility = View.GONE
                     LinearLayoutSecundaria.visibility = View.VISIBLE
                     Log.d("InformacionPartido", "Existen registros: true")
-
-                    // Realiza la acción deseada si existen registros
                 } else {
                     Log.d("InformacionPartido", "Existen registros: false")
-                    // Realiza la acción deseada si no existen registros
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Maneja el error de parsing si es necesario
             }
         } else {
             Log.d("InformacionPartido", "El archivo no existe")
-            // Maneja el caso en que el archivo no existe
         }
     }
 
-
-    fun registrarEstadísticasJugadores(idTorneo: String, idPartido: String, jugadores: List<List<Any>>) {
+    fun registrarEstadísticasJugadores(
+        idTorneo: String,
+        idPartido: String,
+        jugadores: List<List<Any>>
+    ) {
         val url = consultaBaseDeDatos.obtenerURLConsulta("7_modificar_resultados_nuevo.php")
-
         val client = OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
-
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("id_torneo", idTorneo)
             .addFormDataPart("id_partido", idPartido)
             .addFormDataPart("opcion", "jugadores")
-
-        // Agregar datos de jugadores al formulario
+        // Se agrega los datos de jugadores al formulario
         for ((indexJugador, jugador) in jugadores.withIndex()) {
             for ((index, value) in jugador.withIndex()) {
                 requestBody.addFormDataPart("jugadores[$indexJugador][$index]", value.toString())
             }
         }
-
         val request = Request.Builder()
             .url(url)
             .post(requestBody.build())
             .build()
-
         // Mostrar el Snackbar de "Guardando..."
         savingSnackbar = Snackbar.make(
             requireView(),
@@ -720,13 +605,10 @@ class Fragment_registrar_estadisticas : Fragment() {
     }
 
     fun recuperarInfoEquipoLocal() {
-
         jugadoresEquipoTL.clear()
-
         val informacionEquipoLocal = File(requireContext().filesDir, "cache_ELocal.txt").readText()
 
 
-        Log.e("este esl json resultante equipo local", "$informacionEquipoLocal")
 
 
         try {
@@ -736,12 +618,8 @@ class Fragment_registrar_estadisticas : Fragment() {
 
             if (json.has("datos")) {
                 val datosArray = json.getAsJsonArray("datos")
-
-                // Trabaja con el array de datos
                 for (jugadorEVisitante in datosArray) {
-
                     val jugador = JSONObject(jugadorEVisitante.toString())
-
                     val CI = jugador.getInt("CI")
                     val nombre = jugador.getString("nombre")
                     val posicion = jugador.getString("posicion")
@@ -750,8 +628,6 @@ class Fragment_registrar_estadisticas : Fragment() {
                     val estatura = jugador.getInt("estatura")
                     val estado = jugador.getString("estado")
                     val foto = jugador.getString("foto")
-
-
                     val objetoJugador = Jugador(
                         CI,
                         nombre,
@@ -765,45 +641,30 @@ class Fragment_registrar_estadisticas : Fragment() {
 
 
                     jugadoresEquipoTL.add(objetoJugador)
-
-
                 }
-
             }
-
-
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
             Log.e("fragmento", "Error al parsear el JSON de partidos: $informacionEquipoLocal")
         }
-
     }
 
     fun recuperarInfoEquipoVisitante() {
-
         jugadoresEquipoTV.clear()
-
-
         val informacionEquipoVisitante =
             File(requireContext().filesDir, "cache_EVisitante.txt").readText()
 
 
-        Log.e("este esl json resultante visitante local", "$informacionEquipoVisitante")
 
         try {
-
             val jsonParser = JsonParser()
             val json: JsonObject = jsonParser.parse(informacionEquipoVisitante).asJsonObject
 
 
             if (json.has("datos")) {
                 val datosArray = json.getAsJsonArray("datos")
-
-                // Trabaja con el array de datos
                 for (jugadorEVisitante in datosArray) {
-
                     val jugador = JSONObject(jugadorEVisitante.toString())
-
                     val CI = jugador.getInt("CI")
                     val nombre = jugador.getString("nombre")
                     val posicion = jugador.getString("posicion")
@@ -812,8 +673,6 @@ class Fragment_registrar_estadisticas : Fragment() {
                     val estatura = jugador.getInt("estatura")
                     val estado = jugador.getString("estado")
                     val foto = jugador.getString("foto")
-
-
                     val objetoJugador = Jugador(
                         CI,
                         nombre,
@@ -827,29 +686,20 @@ class Fragment_registrar_estadisticas : Fragment() {
 
 
                     jugadoresEquipoTV.add(objetoJugador)
-
-
                 }
             }
-
-
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
             Log.e("fragmento", "Error al parsear el JSON de partidos: $informacionEquipoVisitante")
         }
-
     }
-
 
     fun validarCampos(
         NAmarillas: String,
         NRojas: String,
         NAutogoles: String,
         NGolesoRecibidos: String,
-
         ): Boolean {
-
-
         if (NAmarillas.isEmpty() || NRojas.isEmpty() || NAutogoles.isEmpty() || NGolesoRecibidos.isEmpty()) {
             return false
         }
@@ -861,10 +711,12 @@ class Fragment_registrar_estadisticas : Fragment() {
     }
 
     // Esta función toma una lista de CheckBox y devuelve una lista de jugadores seleccionados
-    fun obtenerJugadoresSeleccionados(checkBoxes: List<CheckBox>, jugadores: List<Jugador>): MutableList<Jugador> {
+    fun obtenerJugadoresSeleccionados(
+        checkBoxes: List<CheckBox>,
+        jugadores: List<Jugador>
+    ): MutableList<Jugador> {
         // Inicializa la lista con un jugador vacío al principio
         val jugadoresSeleccionados = mutableListOf(Jugador(0, "", "", "", 0, 0, "", ""))
-
         // Itera sobre los CheckBoxes y agrega los jugadores seleccionados a la lista
         for ((index, checkBox) in checkBoxes.withIndex()) {
             if (checkBox.isChecked) {
@@ -875,25 +727,20 @@ class Fragment_registrar_estadisticas : Fragment() {
         return jugadoresSeleccionados
     }
 
-
-    fun cargarJugadoresTitularesParaEstadisticas(){
+    fun cargarJugadoresTitularesParaEstadisticas() {
         val adapterTL = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
             jugadoresSeleccionadosTL.map { it.nombre })
         adapterTL.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         lista_jugadores_T_L.adapter = adapterTL
-
         val adapterTV = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
             jugadoresSeleccionadosTV.map { it.nombre })
         adapterTV.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         lista_jugadores_T_V.adapter = adapterTV
-
-
         // CAPTURAR CUANDO SE SELECCIONE UN JUGADOR
-
         lista_jugadores_T_L.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>,
@@ -902,7 +749,7 @@ class Fragment_registrar_estadisticas : Fragment() {
                 id: Long
             ) {
                 if (position > 0) {
-                    val jugadorSeleccionado = jugadoresEquipoTL[position-1]
+                    val jugadorSeleccionado = jugadoresEquipoTL[position - 1]
                     mostrarDialogo(jugadorSeleccionado)
                     lista_jugadores_T_L.setSelection(0)
                 }
@@ -921,7 +768,7 @@ class Fragment_registrar_estadisticas : Fragment() {
                 id: Long
             ) {
                 if (position > 0) {
-                    val jugadorSeleccionado = jugadoresEquipoTV[position-1]
+                    val jugadorSeleccionado = jugadoresEquipoTV[position - 1]
                     mostrarDialogo(jugadorSeleccionado)
                     lista_jugadores_T_V.setSelection(0)
                 }
@@ -931,8 +778,5 @@ class Fragment_registrar_estadisticas : Fragment() {
                 // No se ha seleccionado ningún jugador
             }
         }
-
     }
-
-
 }

@@ -1,4 +1,5 @@
 package com.example.sgligas.Login
+
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -12,20 +13,15 @@ import com.example.sgligas.R
 import java.util.concurrent.TimeUnit
 
 class VerificarCodigo : AppCompatActivity() {
-
     private lateinit var edtCodigo: EditText
     private lateinit var btnVerificar: Button
     private lateinit var textView7: TextView
-
     private lateinit var numeroIntentos: TextView
-
     private var correoUsuario: String = ""
     private var codigoVerificacion: String = ""
     private var intentosRestantes: Int = 3
-
     private lateinit var countDownTimer: CountDownTimer
     private var timeLeftInMillis: Long = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_verificar_codigo)
@@ -34,7 +30,6 @@ class VerificarCodigo : AppCompatActivity() {
         btnVerificar = findViewById(R.id.btnverificarcode)
         textView7 = findViewById(R.id.textView7)
         numeroIntentos = findViewById(R.id.textNumeroIntentos)
-
         val imgreturn: ImageView = findViewById(R.id.imgreturn)
         imgreturn.setOnClickListener {
             irActividad(RecuperarContrasena::class.java)
@@ -64,7 +59,6 @@ class VerificarCodigo : AppCompatActivity() {
             override fun onFinish() {
                 irActividad(RecuperarContrasena::class.java)
                 Toast.makeText(this@VerificarCodigo, "Tiempo agotado", Toast.LENGTH_SHORT).show()
-
             }
         }.start()
     }
@@ -73,14 +67,16 @@ class VerificarCodigo : AppCompatActivity() {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(timeLeftInMillis)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(timeLeftInMillis) % 60
         val formattedTime = String.format("%02d:%02d", minutes, seconds)
-        textView7.text = "Introduce el código de verificación enviado al correo $correoUsuario. Tiempo de validez de código ($formattedTime)"
+        textView7.text =
+            "Introduce el código de verificación enviado al correo $correoUsuario. Tiempo de validez de código ($formattedTime)"
     }
 
     private fun verificarCodigo() {
         val codigoIngresado = edtCodigo.text.toString()
 
         if (codigoIngresado.isEmpty()) {
-            Toast.makeText(this, "Por favor, ingresa el código de verificación", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Por favor, ingresa el código de verificación", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -96,10 +92,18 @@ class VerificarCodigo : AppCompatActivity() {
             limpicarCampo()
 
             if (intentosRestantes == 0) {
-                Toast.makeText(this, "Has agotado los intentos. Vuelve a iniciar el proceso de recuperación.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Has agotado los intentos. Vuelve a iniciar el proceso de recuperación.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 irActividad(RecuperarContrasena::class.java)
             } else {
-                Toast.makeText(this, "Código incorrecto. Intentos restantes: $intentosRestantes", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Código incorrecto. Intentos restantes: $intentosRestantes",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -114,7 +118,7 @@ class VerificarCodigo : AppCompatActivity() {
         countDownTimer.cancel()
     }
 
-    private fun limpicarCampo(){
+    private fun limpicarCampo() {
         edtCodigo.text.clear()
     }
 }

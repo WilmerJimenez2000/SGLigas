@@ -12,13 +12,11 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 class MyForegroundService : Service() {
-
     private val handler = Handler(Looper.getMainLooper())
     private val myRunnable = object : Runnable {
         override fun run() {
-            // Aquí va la función que deseas ejecutar
+            // Aquí va la función que se va a ejecutar
             obtenerTodasLasLigas()
-
             // Programar la próxima ejecución en 1 minuto (60000 milisegundos)
             handler.postDelayed(this, 60000)
         }
@@ -49,23 +47,22 @@ class MyForegroundService : Service() {
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-
                     val jsonData = response.body?.string()
-
                     // Guardar jsonData en cache_cat_ligas.txt
                     jsonData?.let {
                         guardarEnArchivo(it, "cache_cat_ligas.txt")
                     }
 
                     Log.e("este es lo que da las ligas de todo ", "$jsonData ")
-
                 } else {
-                    // Manejar errores en la respuesta HTTP
+                    // Se maneja los errores en la respuesta HTTP
+                    Log.e("Error HTTP", "Código: ${response.code}")
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+                // Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
             }
         })
     }

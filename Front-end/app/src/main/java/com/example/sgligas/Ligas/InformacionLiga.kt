@@ -1,6 +1,5 @@
 package com.example.sgligas.Ligas
 
-
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -24,8 +23,6 @@ import java.io.File
 import java.io.IOException
 
 class InformacionLiga : AppCompatActivity() {
-
-
     private lateinit var nombre_liga: TextView
     private lateinit var boton_voler: ImageButton
     private lateinit var fragmentAdapter: FragmentAdapter
@@ -33,12 +30,9 @@ class InformacionLiga : AppCompatActivity() {
     private lateinit var fecha_fundacion: String
     private lateinit var nombreLiga: String
     private lateinit var cerrar_sesion_presidente: Button
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_informacion_liga)
-
         val id = intent.getIntExtra("ID", -1)
 
         obtenerCategoriasLiga(id.toString())
@@ -55,43 +49,32 @@ class InformacionLiga : AppCompatActivity() {
 
         boton_voler = findViewById(R.id.btn_regresar)
         boton_voler.setOnClickListener {
-            //irActividad(Mostrar_Ligas::class.java)
             onBackPressed()
         }
 
         cerrar_sesion_presidente = findViewById(R.id.btn_cerrar_sesion_presidente)
-
-
         val archivoUsuario = File(this@InformacionLiga.filesDir, "cache_user.txt")
 
         if (archivoUsuario.exists()) {
-
             val UsuarioLogin = archivoUsuario.readText()
             val json = JSONObject(UsuarioLogin)
             val jsonUsuario = json.getString("tipo_usuario")
             if (jsonUsuario == "presidente") {
-
-
                 cerrar_sesion_presidente.visibility = View.VISIBLE
                 boton_voler.visibility = View.INVISIBLE
-
-                // También puedes configurar otros atributos o escuchar eventos del botón si es necesario
                 cerrar_sesion_presidente.setOnClickListener {
-
                     val archivoUsuario = File(this@InformacionLiga.filesDir, "cache_user.txt")
 
                     if (archivoUsuario.exists()) {
                         // El archivo existe, intenta borrarlo
                         if (archivoUsuario.delete()) {
                             // Borrado exitoso
-                            // Realiza acciones adicionales si es necesario
                             Log.i(
                                 "Borrado",
                                 "El archivo cache_user.txt ha sido borrado exitosamente."
                             )
                         } else {
                             // Fallo al borrar el archivo
-                            // Realiza acciones alternativas o maneja el caso según sea necesario
                             Log.e(
                                 "Error de borrado",
                                 "Fallo al intentar borrar el archivo cache_user.txt."
@@ -99,23 +82,14 @@ class InformacionLiga : AppCompatActivity() {
                         }
                     } else {
                         // El archivo no existe
-                        // Realiza acciones alternativas o maneja el caso según sea necesario
                         Log.i("No existe", "El archivo cache_user.txt no existe en el directorio.")
                     }
                     irActividad(Login::class.java)
                 }
-            }else{
-
-
+            } else {
             }
-
-            // El archivo existe, intenta borrarlo
-
         }
-
-
     }
-
 
     fun irActividad(
         clase: Class<*>
@@ -132,12 +106,8 @@ class InformacionLiga : AppCompatActivity() {
         bundle.putString("direccion", direccionLiga)
         bundle.putString("fechaFundacion", fecha_fundacion)
         bundle.putString("listaCategorias", lista_categorias)
-
-
         val fragmentInfoLiga = Fragment_info_liga()
         fragmentInfoLiga.arguments = bundle
-
-
         val fragmentCategoriasLiga = Fragment_categorias_liga()
         fragmentCategoriasLiga.arguments = bundle
 
@@ -146,30 +116,20 @@ class InformacionLiga : AppCompatActivity() {
 
 
         fragmentAdapter = FragmentAdapter(supportFragmentManager)
-
-
         val archivoUsuario = File(this.filesDir, "cache_user.txt")
 
         if (archivoUsuario.exists()) {
-
             val UsuarioLogin = archivoUsuario.readText()
-
-
             val json = JSONObject(UsuarioLogin)
-
             val jsonUsuario = json.getString("tipo_usuario")
 
 
 
             if (jsonUsuario == "presidente") {
-
-
                 fragmentAdapter.addFragment(fragmentCategoriasLiga, "CATEGORÍAS")
-
             } else {
                 fragmentAdapter.addFragment(fragmentInfoLiga, "INFO")
                 fragmentAdapter.addFragment(fragmentCategoriasLiga, "CATEGORÍAS")
-
             }
         }
 
@@ -179,15 +139,12 @@ class InformacionLiga : AppCompatActivity() {
         tablayout.setupWithViewPager(viewPager)
     }
 
-
     private fun obtenerCategoriasLiga(idLiga: String) {
-
         val url = consultaBaseDeDatos.obtenerURLConsulta("3_mostrar_categoria.php")
         val client = OkHttpClient()
         val requestBody = FormBody.Builder()
             .add("id_liga", idLiga)
             .build()
-
         val request = Request.Builder()
             .url(url)
             .post(requestBody)
@@ -197,36 +154,33 @@ class InformacionLiga : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
                     val jsonData = response.body?.string()
-                    // println("Contenido de jsonData: $jsonData")
                     try {
                         val jsonObject = JSONObject(jsonData)
                         if (jsonObject.has("datos")) {
-
                             runOnUiThread {
                                 cargarDatos(direccionLiga, fecha_fundacion, jsonData ?: "")
                             }
-
                         } else {
-                            // Manejar el caso donde "datos" no está presente en la respuesta
+                            // Se maneja el caso donde "datos" no está presente en la respuesta
+                            Log.e("", "No hay datos en la respuesta")
                         }
                     } catch (e: JSONException) {
                         e.printStackTrace()
+                        Log.e("", "Error al parsear el JSON")
 
                     }
                 } else {
-                    // Manejar errores en la respuesta HTTP
+                    // Se maneja los errores en la respuesta HTTP
+                    Log.e("Error HTTP", "Código: ${response.code}")
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+                // Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
+
+
             }
         })
     }
-
-
-
-
-
-
 }

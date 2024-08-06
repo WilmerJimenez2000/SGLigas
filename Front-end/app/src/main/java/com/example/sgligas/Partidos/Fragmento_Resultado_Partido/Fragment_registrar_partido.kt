@@ -11,8 +11,6 @@ import com.google.gson.JsonSyntaxException
 import org.json.JSONObject
 import java.io.File
 import kotlin.properties.Delegates
-
-
 import android.widget.*
 import com.example.sgligas.*
 import com.example.sgligas.Jugadores.Jugador
@@ -21,14 +19,10 @@ import okhttp3.*
 import java.io.IOException
 
 class Fragment_registrar_partido : Fragment() {
-
     private lateinit var escudoLocal: ImageView
     private lateinit var escudoVisitante: ImageView
-
     private lateinit var escudoLocal2: ImageView
     private lateinit var escudoVisitante2: ImageView
-
-
     private var idPartidos by Delegates.notNull<Int>()
     private lateinit var nombreEquipoLocal: String
     private lateinit var escudoEquipoLocal: String
@@ -44,38 +38,21 @@ class Fragment_registrar_partido : Fragment() {
     private lateinit var veedor: String
     private lateinit var cancha: String
     private lateinit var estado: String
-
-
-
     private var idTorneo by Delegates.notNull<Int>()
     private lateinit var numeroJornada: String
-
-
     private lateinit var boton_registrar: Button
-
     private lateinit var ngoles_local: EditText
     private lateinit var ngoles_visitante: EditText
-
-
     private var glocal: String = ""
     private var gvisitante: String = ""
     private var jugadoresEquipoTL: MutableList<Jugador> = mutableListOf()
-    private var jugadoresEquipoTV : MutableList<Jugador> = mutableListOf()
-
-
+    private var jugadoresEquipoTV: MutableList<Jugador> = mutableListOf()
     private lateinit var LinearLayoutPrincipal: LinearLayout
     private lateinit var LinearLayoutSecundario: LinearLayout
-
-
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_registrar_partido, container, false)
 
@@ -84,15 +61,10 @@ class Fragment_registrar_partido : Fragment() {
         escudoLocal2 = view.findViewById(R.id.image_equipo_L_JT)
         escudoVisitante2 = view.findViewById(R.id.image_equipo_V_JT)
 
-        LinearLayoutPrincipal= view.findViewById(R.id.linearLayoutPrincipal)
-        LinearLayoutSecundario=view.findViewById(R.id.LinearLayoutSecundario)
-
-
-
-
+        LinearLayoutPrincipal = view.findViewById(R.id.linearLayoutPrincipal)
+        LinearLayoutSecundario = view.findViewById(R.id.LinearLayoutSecundario)
         val informacionPartido = File(requireContext().filesDir, "cache_file.txt").readText()
 
-        Log.e("estoy en el fragmento ", "$informacionPartido")
 
 
         try {
@@ -114,22 +86,16 @@ class Fragment_registrar_partido : Fragment() {
             veedor = json.getString("veedor")
             cancha = json.getString("cancha")
             idTorneo = json.getInt("idTorneo")
-            estado=json.getString("estado")
-
-
+            estado = json.getString("estado")
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
             Log.e("fragmento", "Error al parsear el JSON de partidos: $informacionPartido")
         }
 
 
-        if(estado=="jugado"){
-
-
-            LinearLayoutPrincipal.visibility= View.GONE
-            LinearLayoutSecundario.visibility= View.VISIBLE
-
-
+        if (estado == "jugado") {
+            LinearLayoutPrincipal.visibility = View.GONE
+            LinearLayoutSecundario.visibility = View.VISIBLE
         }
 
 
@@ -150,11 +116,6 @@ class Fragment_registrar_partido : Fragment() {
 
 
         boton_registrar.setOnClickListener {
-
-
-
-
-
             cargarDatosLiga()
 
             glocal = ngoles_local.text.toString()
@@ -169,29 +130,18 @@ class Fragment_registrar_partido : Fragment() {
                 ).show()
                 return@setOnClickListener
             }
-
-
-            val partido = listOf( "$idEquipoLocal",
+            val partido = listOf(
+                "$idEquipoLocal",
                 "$glocal",
                 "$gvisitante",
-                "$idEquipoVisitante",)
+                "$idEquipoVisitante",
+            )
 
 
 
 
 
             modificarPartido(idTorneo.toString(), idPartidos.toString(), partido)
-
-
-
-
-
-
-
-
-
-
-
         }
 
 
@@ -199,19 +149,13 @@ class Fragment_registrar_partido : Fragment() {
         return view
     }
 
-
-
-
     fun modificarPartido(
         idTorneo: String,
         idPartido: String,
         partido: List<String>,
-
-    ) {
+        ) {
         val url = consultaBaseDeDatos.obtenerURLConsulta("7_modificar_resultados_nuevo.php")
-
         val client = OkHttpClient()
-
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("id_torneo", idTorneo)
@@ -223,9 +167,6 @@ class Fragment_registrar_partido : Fragment() {
 
             Log.e("$index", "$value")
         }
-
-
-
         val request = Request.Builder()
             .url(url)
             .post(requestBody.build())
@@ -233,44 +174,34 @@ class Fragment_registrar_partido : Fragment() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                // Manejar la respuesta del servidor
                 if (response.isSuccessful) {
-                    // Éxito
                     val jsonData = response.body?.string()
-                    // Procesar la respuesta JSON si es necesario
 
-                    Log.e("estes es lo que sale eeeeeeeeeeeeeee", "$jsonData")
 
                     activity?.runOnUiThread {
-
                         Toast.makeText(requireContext(), "Registro Existoso", Toast.LENGTH_SHORT)
                             .show()
 
                         requireActivity().onBackPressed()
-
-
                     }
-
-
                 } else {
-                    // Manejar errores en la respuesta HTTP
+                    // Se maneja los errores en la respuesta HTTP
+                    Log.e("Error HTTP", "Código: ${response.code}")
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+                // Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
             }
         })
     }
-
-
 
     fun limpiarCampos() {
         // Limpiar los campos
         ngoles_local.text.clear()
         ngoles_visitante.text.clear()
     }
-
 
     fun irActividad(
         clase: Class<*>
@@ -279,27 +210,13 @@ class Fragment_registrar_partido : Fragment() {
         startActivity(intent)
     }
 
+    fun cargarDatosLiga() {
+        val fileName = "cache_CargarL.txt"
+        val filePath = File(requireContext().filesDir, fileName)
+        val nuevosDatos = "True"
 
-
-    fun cargarDatosLiga(){
-
-
-
-            val fileName = "cache_CargarL.txt"
-
-            val filePath = File(requireContext().filesDir, fileName)
-
-            val nuevosDatos = "True"
-
-            filePath.writeText(nuevosDatos)
-
-
+        filePath.writeText(nuevosDatos)
     }
-
-
-
-
-
 }
 
 
