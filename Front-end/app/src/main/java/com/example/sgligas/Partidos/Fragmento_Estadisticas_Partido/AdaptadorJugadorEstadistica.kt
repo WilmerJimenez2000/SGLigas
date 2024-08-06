@@ -12,7 +12,6 @@ class AdaptadorJugadorEstadistica(
     private val jugadores: MutableList<EstadisticaJugador>,
     private val itemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<AdaptadorJugadorEstadistica.JugadorViewHolder>() {
-
     interface OnItemClickListener {
         fun onItemClick(estadisticaJugador: EstadisticaJugador)
         fun onItemDeleteClick(position: Int)
@@ -37,14 +36,11 @@ class AdaptadorJugadorEstadistica(
     fun eliminarJugador(position: Int) {
         jugadores.removeAt(position)
         notifyItemRemoved(position)
-
     }
 
     fun obtenerListaJugadoresSeleccionados(): MutableList<EstadisticaJugador> {
         return jugadores
     }
-
-
 
     class JugadorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nombre: TextView = itemView.findViewById(R.id.textView_nombreJ)
@@ -52,26 +48,18 @@ class AdaptadorJugadorEstadistica(
         val TR: TextView = itemView.findViewById(R.id.textView_TR)
         val gol: TextView = itemView.findViewById(R.id.textView_gol)
         val agol: TextView = itemView.findViewById(R.id.textView_agol)
-        val btn_eliminar_J_Selec: ImageView = itemView.findViewById(R.id.imageView_eliminarJ_estadistica)
-
-
+        val btn_eliminar_J_Selec: ImageView =
+            itemView.findViewById(R.id.imageView_eliminarJ_estadistica)
 
         fun bind(estadisticaJugador: EstadisticaJugador, itemClickListener: OnItemClickListener) {
-            nombre.text=estadisticaJugador.nombreJ
+            nombre.text = estadisticaJugador.nombreJ
             TA.text = estadisticaJugador.amarillas.toString()
             TR.text = estadisticaJugador.rojas.toString()
 
-            if(estadisticaJugador.posicion=="Portero"){
-
+            if (estadisticaJugador.posicion == "Portero") {
                 gol.text = estadisticaJugador.goles_recibidos.toString()
-
-
-
-            }else{
-
+            } else {
                 gol.text = estadisticaJugador.goles.toString()
-
-
             }
             agol.text = estadisticaJugador.autogoles.toString()
 
@@ -80,11 +68,8 @@ class AdaptadorJugadorEstadistica(
             }
 
             btn_eliminar_J_Selec.setOnClickListener {
-
-               itemClickListener.onItemDeleteClick(adapterPosition)
+                itemClickListener.onItemDeleteClick(adapterPosition)
             }
-
-
         }
     }
 }

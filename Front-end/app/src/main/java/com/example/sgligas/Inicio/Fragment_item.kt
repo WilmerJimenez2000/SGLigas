@@ -7,10 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.sgligas.R
 
-
 class Fragment_item : Fragment() {
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -18,6 +15,4 @@ class Fragment_item : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_item, container, false)
     }
-
-
 }

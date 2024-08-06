@@ -15,15 +15,10 @@ import com.example.sgligas.R
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 
-
 class Fragment_categorias_liga : Fragment() {
-
     private val listaDeCategorias = mutableListOf<Categoria>()
-
     private lateinit var recyclerViewMain: RecyclerView
     private lateinit var layoutMensajeNocategorias: LinearLayout
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,10 +36,7 @@ class Fragment_categorias_liga : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val listaCategorias = arguments?.getString("listaCategorias") ?: "No disponible"
-
-
         val jsonParser = JsonParser()
         val json: JsonObject = jsonParser.parse(listaCategorias).asJsonObject
 
@@ -54,37 +46,23 @@ class Fragment_categorias_liga : Fragment() {
 
 
             if (datosArray != null && !datosArray.isEmpty()) {
-                // Trabaja con el array de datos
                 for (element in datosArray) {
-                    // Realiza las operaciones necesarias
                     val idCategoria = element.asJsonObject.get("id_categoria").asInt
                     val nombreCategoria = element.asJsonObject.get("nombre").asString
                     val numEquipos = element.asJsonObject.get("num_equipos").asInt
-
-                    // Crea instancias de la clase Categoria o realiza las operaciones deseadas
-
-
-                    // Crea una instancia de la clase Categoria
                     val categoria = Categoria(idCategoria, nombreCategoria, numEquipos)
-
-                    // Agrega la instancia a la lista
                     listaDeCategorias.add(categoria)
                 }
-
-
                 val adapter = Adaptador_categorias(
                     listaDeCategorias,
                     object : Adaptador_categorias.OnItemClickListener {
                         override fun onItemClick(categoria: Categoria) {
-
-
-                            // Llamar a la función irActividad con la clase adecuada
                             irActividad(
                                 InformacionCategoria::class.java,
                                 categoria.id_categoria,
                                 categoria.nombre_categoria,
                                 categoria.num_equipos
-                            ) // Reemplaza "ActividadDestino" con la clase de destino
+                            )
                         }
                     })
 
@@ -92,22 +70,12 @@ class Fragment_categorias_liga : Fragment() {
 
                 recyclerViewMain.adapter = adapter
                 recyclerViewMain.layoutManager = LinearLayoutManager(requireContext())
-
-
             } else {
-
-
                 recyclerViewMain.visibility = View.GONE
 
                 layoutMensajeNocategorias.visibility = View.VISIBLE
-
-
             }
-
-
         }
-
-
     }
 
     fun irActividad(clase: Class<*>, id: Int, nombre_categoria: String, num_equipos: Int) {
@@ -119,10 +87,5 @@ class Fragment_categorias_liga : Fragment() {
         intent.putExtra("num_equipos", num_equipos)
         startActivity(intent)
     }
-
-
-
-
-
 }
 

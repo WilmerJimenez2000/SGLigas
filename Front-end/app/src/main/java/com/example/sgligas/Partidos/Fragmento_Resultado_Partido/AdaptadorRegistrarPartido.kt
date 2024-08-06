@@ -13,7 +13,6 @@ class AdaptadorRegistrarPartido(
     private val jugadores: MutableList<Jugador>,
     private val itemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<AdaptadorRegistrarPartido.JugadorViewHolder>() {
-
     interface OnItemClickListener {
         fun onItemClick(jugador: Jugador)
         fun onItemDeleteClick(position: Int)
@@ -29,8 +28,6 @@ class AdaptadorRegistrarPartido(
     override fun onBindViewHolder(holder: JugadorViewHolder, position: Int) {
         val jugador = jugadores[position]
         holder.bind(jugador, itemClickListener)
-
-
     }
 
     override fun getItemCount(): Int {
@@ -48,29 +45,20 @@ class AdaptadorRegistrarPartido(
 
     class JugadorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nombre: TextView = itemView.findViewById(R.id.textView_nombreJT)
-        val btn_eliminar_J_Selec: ImageView = itemView.findViewById(R.id.imageView_eliminarJ_estadistica)
-
-        val visto: ImageView=itemView.findViewById(R.id.imageView_visto)
-
+        val btn_eliminar_J_Selec: ImageView =
+            itemView.findViewById(R.id.imageView_eliminarJ_estadistica)
+        val visto: ImageView = itemView.findViewById(R.id.imageView_visto)
         fun bind(jugador: Jugador, itemClickListener: OnItemClickListener) {
             nombre.text = jugador.nombre
 
             itemView.setOnClickListener {
                 itemClickListener.onItemClick(jugador)
-                //nombre.setBackgroundColor(itemView.resources.getColor(R.color.textoColorDialogo)) // Reemplaza R.color.colorRojo con tu color específico
-                visto.visibility= View.VISIBLE
-
-
-
-
+                visto.visibility = View.VISIBLE
             }
 
             btn_eliminar_J_Selec.setOnClickListener {
                 itemClickListener.onItemDeleteClick(adapterPosition)
             }
-
-
         }
-
     }
 }

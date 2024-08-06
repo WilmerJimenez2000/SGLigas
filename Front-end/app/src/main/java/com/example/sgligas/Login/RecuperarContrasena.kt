@@ -18,18 +18,15 @@ import java.io.IOException
 
 class RecuperarContrasena : AppCompatActivity() {
     private lateinit var edtCorreo: EditText
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recuperar_contrasena)
 
         edtCorreo = findViewById(R.id.edtCodigoVer)
-
         val imgreturn: ImageView = findViewById(R.id.imgreturn)
         imgreturn.setOnClickListener {
             irActividad(Login::class.java)
         }
-
         val btnComprobar: Button = findViewById(R.id.btnverificarcode)
         btnComprobar.setOnClickListener {
             comprobarUsuario(it)
@@ -38,21 +35,20 @@ class RecuperarContrasena : AppCompatActivity() {
 
     fun comprobarUsuario(view: View) {
         val correoUsuario = edtCorreo.text.toString()
-
-        // Verificar si el formato del correo electrónico es válido
+        // Se verifica si el formato del correo electrónico es válido
         if (!Patterns.EMAIL_ADDRESS.matcher(correoUsuario).matches()) {
-            Toast.makeText(applicationContext, "Ingrese un correo electrónico válido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                applicationContext,
+                "Ingrese un correo electrónico válido",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
-
         val url = consultaBaseDeDatos.obtenerURLConsulta("recuperar_contraseña.php")
-
         val client = OkHttpClient()
-
         val formBody = FormBody.Builder()
             .add("correoUsuario", correoUsuario)
             .build()
-
         val request = Request.Builder()
             .url(url)
             .post(formBody)
@@ -61,7 +57,11 @@ class RecuperarContrasena : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    Toast.makeText(applicationContext, "Error en la solicitud HTTP", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext,
+                        "Error en la solicitud HTTP",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -71,21 +71,15 @@ class RecuperarContrasena : AppCompatActivity() {
 
                 runOnUiThread {
                     Log.d("HTTP Response", responseBody ?: "")
-
-                    // Parsear la respuesta JSON
                     val gson = Gson()
                     val jsonData = gson.fromJson(responseBody, JsonResponse::class.java)
-
-                    // Aquí puedes procesar los datos de la respuesta JSON
                     if (jsonData.success) {
-                        // Obtener el correo y el código de verificación
                         val correoUsuario = jsonData.correoUsuario
                         val codigoVerificacion = jsonData.codigoVerificacion
-
-                        // Continuar con la siguiente actividad pasando los datos necesarios
                         irActividad1(VerificarCodigo::class.java, correoUsuario, codigoVerificacion)
                     } else {
-                        Toast.makeText(applicationContext, jsonData.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, jsonData.message, Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
@@ -99,6 +93,7 @@ class RecuperarContrasena : AppCompatActivity() {
         }
         startActivity(intent)
     }
+
     fun irActividad(
         clase: Class<*>
     ) {
@@ -106,7 +101,10 @@ class RecuperarContrasena : AppCompatActivity() {
         startActivity(intent)
     }
 
-
-    // Clase para representar la respuesta JSON
-    data class JsonResponse(val success: Boolean, val message: String, val correoUsuario: String, val codigoVerificacion: String)
+    data class JsonResponse(
+        val success: Boolean,
+        val message: String,
+        val correoUsuario: String,
+        val codigoVerificacion: String
+    )
 }

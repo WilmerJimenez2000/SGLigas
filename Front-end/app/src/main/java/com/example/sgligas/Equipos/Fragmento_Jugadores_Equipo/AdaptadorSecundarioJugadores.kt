@@ -14,7 +14,6 @@ class AdaptadorSecundarioJugadores(
     private val jugadores: List<EstadisticaJugador>,
     private val itemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<AdaptadorSecundarioJugadores.JugadorViewHolder>() {
-
     interface OnItemClickListener {
         fun onItemClick(jugador: EstadisticaJugador)
     }
@@ -27,7 +26,6 @@ class AdaptadorSecundarioJugadores(
     override fun onBindViewHolder(holder: JugadorViewHolder, position: Int) {
         val jugador = jugadores[position]
         holder.bind(jugador, itemClickListener)
-
     }
 
     override fun getItemCount(): Int {
@@ -42,10 +40,8 @@ class AdaptadorSecundarioJugadores(
         val tarjetasAmarillasTextView: TextView = itemView.findViewById(R.id.textView_tarjetas_r)
         val golesTextView: TextView = itemView.findViewById(R.id.textView_goles)
         val tarjetasRojasTextView: TextView = itemView.findViewById(R.id.textView_tarjetas_a)
-
         fun bind(jugador: EstadisticaJugador, itemClickListener: OnItemClickListener) {
-
-            numeroTextView.text= jugador.numeroCamiseta.toString()
+            numeroTextView.text = jugador.numeroCamiseta.toString()
 
             nombreTextView.text = jugador.nombreJ
             pjTextView.text = jugador.pj.toString()
@@ -55,7 +51,6 @@ class AdaptadorSecundarioJugadores(
 
             if (jugador.posicion == "Portero") {
                 golesTextView.text = jugador.goles_recibidos.toString()
-
             } else {
                 golesTextView.text = jugador.goles.toString()
             }
@@ -73,11 +68,7 @@ class AdaptadorSecundarioJugadores(
             itemView.setOnClickListener {
                 itemClickListener.onItemClick(jugador)
             }
-
         }
     }
-
     ///
-
-
 }

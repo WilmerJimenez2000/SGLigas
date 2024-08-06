@@ -17,29 +17,17 @@ import com.squareup.picasso.Picasso
 
 class InformacionJugador : AppCompatActivity() {
     private lateinit var boton_voler: ImageButton
-    private lateinit var  nombre_jugador: TextView
+    private lateinit var nombre_jugador: TextView
     private lateinit var fragmentAdapter: FragmentAdapter
-
     private lateinit var imagenJugador: ImageView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_informacion_jugador)
 
         boton_voler = findViewById(R.id.btn_regresar)
         boton_voler.setOnClickListener {
-            //irActividad(InformacionEquipo::class.java)
             onBackPressed()
         }
-
-
-
-
-        // En tu actividad InformacionJugador
-
-
-
-
         val CI = intent.getIntExtra("CI", -1)
         val nombreJugador = intent.getStringExtra("nombre_jugador")
         val fechaNacimiento = intent.getStringExtra("fecha_nacimiento")
@@ -59,13 +47,14 @@ class InformacionJugador : AppCompatActivity() {
 
 
 
-        nombre_jugador=findViewById(R.id.nombre_jugador)
-        nombre_jugador.text=nombreJugador
-        imagenJugador=findViewById(R.id.imagen_jugador)
+        nombre_jugador = findViewById(R.id.nombre_jugador)
+        nombre_jugador.text = nombreJugador
+        imagenJugador = findViewById(R.id.imagen_jugador)
 
         Picasso.get().load(urlImagen).into(imagenJugador)
 
-        cargarDatos(fechaNacimiento.toString(), posicion.toString(),"${estatura} cm",
+        cargarDatos(
+            fechaNacimiento.toString(), posicion.toString(), "${estatura} cm",
             nombreJugador.toString(),
             CI.toString(),
             pj.toString(),
@@ -77,14 +66,7 @@ class InformacionJugador : AppCompatActivity() {
             urlImagen.toString(),
             numero.toString()
         )
-
-
-
-
-
     }
-
-
 
     fun irActividad(
         clase: Class<*>
@@ -93,26 +75,24 @@ class InformacionJugador : AppCompatActivity() {
         startActivity(intent)
     }
 
-
-    fun cargarDatos(fechaNacimiento:String, posicion: String, estatura: String,
-                    nombreJ: String,
-                    CI: String,
-                    pj: String,
-                    rojas: String,
-                    amarillas: String,
-                    goles: String,
-                    goles_recibidos: String,
-                    autogoles: String,
-                    foto: String,
-                    numeroCamiseta: String
-    ){
-        var viewPager = findViewById (R.id.viewPager_jugador) as ViewPager
+    fun cargarDatos(
+        fechaNacimiento: String, posicion: String, estatura: String,
+        nombreJ: String,
+        CI: String,
+        pj: String,
+        rojas: String,
+        amarillas: String,
+        goles: String,
+        goles_recibidos: String,
+        autogoles: String,
+        foto: String,
+        numeroCamiseta: String
+    ) {
+        var viewPager = findViewById(R.id.viewPager_jugador) as ViewPager
         var tablayout = findViewById(R.id.tablayout_jugador) as TabLayout
-
-
         val bundle = Bundle()
 
-        bundle.putString("fechaNacimiento",fechaNacimiento)
+        bundle.putString("fechaNacimiento", fechaNacimiento)
         bundle.putString("posicion", posicion)
         bundle.putString("estatura", estatura)
         bundle.putString("CI", CI)
@@ -124,22 +104,15 @@ class InformacionJugador : AppCompatActivity() {
         bundle.putString("amarillas", amarillas)
         bundle.putString("goles", goles)
         bundle.putString("goles", goles)
-        bundle.putString( "goles_recibidos", goles_recibidos)
+        bundle.putString("goles_recibidos", goles_recibidos)
         bundle.putString("autogoles", autogoles)
 
 
         Log.e("se cargo los datosggggg pj: ", "$pj")
-
-
-
-
-
-
         val fragmentInfoJugador = Fragment_info_jugador()
         fragmentInfoJugador.arguments = bundle
-
-        val fragmentEstadisticasJugador= Fragment_estadisticas_jugador()
-        fragmentEstadisticasJugador.arguments=bundle
+        val fragmentEstadisticasJugador = Fragment_estadisticas_jugador()
+        fragmentEstadisticasJugador.arguments = bundle
 
 
 

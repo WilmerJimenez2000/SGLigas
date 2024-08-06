@@ -16,27 +16,17 @@ import com.google.gson.JsonSyntaxException
 import org.json.JSONObject
 import java.io.File
 
-
 class Fragment_partidos_equipo : Fragment() {
-
-
     private val tarjetasMesPartidoList = mutableListOf<Tarjeta_mes_partido>()
     private var listaDePartidos: MutableList<Partido> = mutableListOf()
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view= inflater.inflate(R.layout.fragment_partidos_equipo, container, false)
-
+        val view = inflater.inflate(R.layout.fragment_partidos_equipo, container, false)
         val recyclerViewMain: RecyclerView = view.findViewById(R.id.recycler_main_partidos_mes)
-
-
         val idTorneo = arguments?.getString("idTorneo") ?: "-1"
-
-
         val listaPartidosEquipo = File(requireContext().filesDir, "cache_PEquipo.txt").readText()
 
 
@@ -49,16 +39,8 @@ class Fragment_partidos_equipo : Fragment() {
                 val partidosElement = json.getAsJsonArray("partidos")
 
                 for (element in partidosElement) {
-
-
-
-
-
                     val json = JSONObject(element.toString())
-
                     val numJornada = json.getInt("num_jornada")
-
-
                     val idPartido = json.getInt("id_partidos")
                     val nombreEquipoLocal = json.getString("nombre_local")
                     val escudoEquipoLocal = json.getString("escudo_local")
@@ -74,12 +56,8 @@ class Fragment_partidos_equipo : Fragment() {
                     val veedor = json.getString("veedor")
                     val cancha = json.getString("cancha")
                     val idTorneo = json.getInt("id_torneo")
-                    val estado=json.getString("estado")
-
-
-
-
-                    // Crea una instancia de la clase Partido
+                    val estado = json.getString("estado")
+                    // Se crea una instancia de la clase Partido
                     val partido = Partido(
                         numJornada,
                         idPartido,
@@ -101,56 +79,37 @@ class Fragment_partidos_equipo : Fragment() {
                     )
 
                     listaDePartidos.add(partido)
-
                 }
-
-
-
-                // Creamos un Map para almacenar los partidos agrupados por número de jornada
-                val partidosPorJornada: Map<Int, List<Partido>> = listaDePartidos.groupBy { it.numero_Jornada }
+                // Se crea un Map para almacenar los partidos agrupados por número de jornada
+                val partidosPorJornada: Map<Int, List<Partido>> =
+                    listaDePartidos.groupBy { it.numero_Jornada }
 
 
 
                 for ((numJornada, partidosEnJornada) in partidosPorJornada) {
-
                     tarjetasMesPartidoList.add(
                         Tarjeta_mes_partido(
                             numJornada,
                             partidosEnJornada
                         )
                     )
-
-
                 }
 
-
-// Aquí puedes hacer lo que necesites con listaPartidos
-            }  else {
+            } else {
                 Log.e("fragmento", "'partidos' no está presente en la respuesta")
             }
-
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
             Log.e("fragmento", "Error al parsear el JSON de partidos: $listaPartidosEquipo")
         }
-
-
-
-
-        // Configurar el RecyclerView principal
-        val adaptador1 = AdaptadorPrincipalPartidos(tarjetasMesPartidoList,requireContext(), idTorneo)
+        // Se configura el RecyclerView principal
+        val adaptador1 =
+            AdaptadorPrincipalPartidos(tarjetasMesPartidoList, requireContext(), idTorneo)
         recyclerViewMain.adapter = adaptador1
         recyclerViewMain.layoutManager = LinearLayoutManager(requireContext())
 
 
 
-
-
-
-
-
-
         return view
     }
-
 }

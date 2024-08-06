@@ -14,45 +14,31 @@ import okhttp3.*
 import java.io.IOException
 
 class InsertarUsuario : AppCompatActivity() {
-
     private lateinit var edtCorreo: EditText
     private lateinit var edtNombre: EditText
     private lateinit var edtContrasena1: EditText
     private lateinit var edtContrasena2: EditText
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_insertar_usuario)
 
-        edtCorreo=findViewById(R.id.edtCorreoReg)
-        edtNombre=findViewById(R.id.edtNombreReg)
-        edtContrasena1=findViewById(R.id.edtPass1Reg)
-        edtContrasena2=findViewById(R.id.edtPass2Reg)
-
-
-        val  imgreturn: ImageView =findViewById(R.id.imgreturn)
-        imgreturn.setOnClickListener{
-
+        edtCorreo = findViewById(R.id.edtCorreoReg)
+        edtNombre = findViewById(R.id.edtNombreReg)
+        edtContrasena1 = findViewById(R.id.edtPass1Reg)
+        edtContrasena2 = findViewById(R.id.edtPass2Reg)
+        val imgreturn: ImageView = findViewById(R.id.imgreturn)
+        imgreturn.setOnClickListener {
             irActividad(MainActivity::class.java)
-
         }
-
-
-        val edtIrInicarContrasena: TextView =findViewById(R.id.edtirIniciarsecion)
-        edtIrInicarContrasena.setOnClickListener{
-
+        val edtIrInicarContrasena: TextView = findViewById(R.id.edtirIniciarsecion)
+        edtIrInicarContrasena.setOnClickListener {
             irActividad(Login::class.java)
-
         }
-
-
         val btnRegistrar: Button = findViewById(R.id.btn_registrarse)
         btnRegistrar.setOnClickListener {
             comprobarCredenciales(it)
         }
     }
-
 
     fun irActividad(
         clase: Class<*>
@@ -61,7 +47,6 @@ class InsertarUsuario : AppCompatActivity() {
         startActivity(intent)
     }
 
-
     fun comprobarCredenciales(view: View) {
         val correoUsuario = edtCorreo.text.toString()
         val nombreUsuario = edtNombre.text.toString()
@@ -69,35 +54,35 @@ class InsertarUsuario : AppCompatActivity() {
         val contrasena2 = edtContrasena2.text.toString()
 
         if (correoUsuario.isNotBlank() && nombreUsuario.isNotBlank() && contrasena1.isNotBlank() && contrasena2.isNotBlank()) {
-
-            // Verificar si el formato del correo electrónico es válido
-            if (!Patterns.EMAIL_ADDRESS.matcher(correoUsuario).matches()||contrasena1.length < 8 ||
-                !nombreUsuario.matches("[a-zA-Z\\s]+".toRegex())) {
+            // Se verifica si el formato del correo electrónico es válido
+            if (!Patterns.EMAIL_ADDRESS.matcher(correoUsuario)
+                    .matches() || contrasena1.length < 8 ||
+                !nombreUsuario.matches("[a-zA-Z\\s]+".toRegex())
+            ) {
                 Toast.makeText(applicationContext, "Datos incorrectos", Toast.LENGTH_SHORT).show()
                 limpiarCampos()
                 return
             }
-
-            // Verificar si las contraseñas coinciden
+            // Se verifica si las contraseñas coinciden
             if (contrasena1 != contrasena2) {
-                Toast.makeText(applicationContext, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Las contraseñas no coinciden",
+                    Toast.LENGTH_SHORT
+                ).show()
 
                 edtContrasena1.text.clear()
                 edtContrasena2.text.clear()
 
                 return
             }
-
-
-            val url= consultaBaseDeDatos.obtenerURLConsulta("1_insertar_usuario.php")
-
+            val url = consultaBaseDeDatos.obtenerURLConsulta("1_insertar_usuario.php")
             val client = OkHttpClient()
             val formBody = FormBody.Builder()
                 .add("correo", correoUsuario)
                 .add("nombre", nombreUsuario)
                 .add("password", contrasena1)
                 .build()
-
             val request = Request.Builder()
                 .url(url)
                 .post(formBody)
@@ -106,7 +91,11 @@ class InsertarUsuario : AppCompatActivity() {
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     runOnUiThread {
-                        Toast.makeText(applicationContext, "Error al conectar con el servidor", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            applicationContext,
+                            "Error al conectar con el servidor",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
@@ -117,35 +106,35 @@ class InsertarUsuario : AppCompatActivity() {
 
                     runOnUiThread {
                         if (jsonResponse.success) {
-                            Toast.makeText(applicationContext, "Usuario registrado exitosamente", Toast.LENGTH_SHORT).show()
-                            Toast.makeText(applicationContext, "Inicie sesión", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                applicationContext,
+                                "Usuario registrado exitosamente",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Toast.makeText(applicationContext, "Inicie sesión", Toast.LENGTH_SHORT)
+                                .show()
                             irActividad(Login::class.java)
                         } else {
-                            Toast.makeText(applicationContext, "El usuario ya existe", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                applicationContext,
+                                "El usuario ya existe",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             limpiarCampos()
                         }
                     }
                 }
             })
-
-
-
-
-        }else{
-
+        } else {
             Toast.makeText(
                 applicationContext,
                 "Campos obligatorios vacíos, ingrese datos",
                 Toast.LENGTH_SHORT
             ).show()
             return
-
         }
-
-
     }
 
-    // Clase para representar la respuesta JSON
     data class JsonResponse(val success: Boolean, val noInserto: Boolean)
 
     private fun limpiarCampos() {
@@ -154,6 +143,4 @@ class InsertarUsuario : AppCompatActivity() {
         edtContrasena1.text.clear()
         edtContrasena2.text.clear()
     }
-
-
 }

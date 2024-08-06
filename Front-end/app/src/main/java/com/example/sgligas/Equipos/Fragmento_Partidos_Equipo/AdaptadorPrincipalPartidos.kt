@@ -28,7 +28,7 @@ class AdaptadorPrincipalPartidos(private val tarjetasMesPartido: List<Tarjeta_me
         val jornada= tarjetaMesPartido.numeroJornada.toString()
         holder.numeroJornada.text = "JORNADA $jornada"
 
-        // Configura el RecyclerView secundario (recyclerPartidos) utilizando Adaptador 2
+        // Se configura el RecyclerView secundario (recyclerPartidos) utilizando Adaptador 2
         val adaptador2 = AdaptadorSecundarioPartidos(tarjetaMesPartido.partidos,
 
             object : AdaptadorSecundarioPartidos.OnItemClickListener {
@@ -67,7 +67,6 @@ class AdaptadorPrincipalPartidos(private val tarjetasMesPartido: List<Tarjeta_me
 
                     )
 
-                    //irActividad(InformacionPartido::class.java)*/
 
 
 
@@ -154,22 +153,13 @@ class AdaptadorPrincipalPartidos(private val tarjetasMesPartido: List<Tarjeta_me
         val jsonData= json.toString()
 
 
-        // Nombre del archivo en caché
         val fileName = "cache_file.txt"
-
-// Ruta completa del archivo
         val filePath = File(context.filesDir, fileName)
-
-// Datos nuevos para almacenar en caché
         val nuevosDatos = jsonData
 
-// Escribir los nuevos datos en el archivo (reemplazando los datos existentes)
         filePath.writeText(nuevosDatos)
 
-// Recuperar todos los datos de la caché
         val cachedData = filePath.readText()
-
-        ////
 
 
 

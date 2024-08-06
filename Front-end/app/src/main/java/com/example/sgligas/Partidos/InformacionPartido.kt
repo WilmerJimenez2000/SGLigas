@@ -29,22 +29,15 @@ import java.io.IOException
 import kotlin.properties.Delegates
 
 class InformacionPartido : AppCompatActivity() {
-
     private lateinit var boton_voler: ImageButton
     private lateinit var nombreELocal: TextView
     private lateinit var nombreEVisitante: TextView
-
     private lateinit var resultadoPartido: TextView
     private lateinit var fechaPartido: TextView
     private lateinit var horaPartido: TextView
-
-
     private lateinit var escudoLocal: ImageView
     private lateinit var escudoVisitante: ImageView
-
     private lateinit var fragmentAdapter: FragmentAdapter
-
-
     private var idPartidos by Delegates.notNull<Int>()
     private lateinit var nombreEquipoLocal: String
     private lateinit var escudoEquipoLocal: String
@@ -60,33 +53,21 @@ class InformacionPartido : AppCompatActivity() {
     private lateinit var veedor: String
     private lateinit var cancha: String
     private lateinit var estado: String
-
-
     private lateinit var idTorneo: String
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_informacion_partido)
 
         boton_voler = findViewById(R.id.btn_regresar)
         boton_voler.setOnClickListener {
-
-
             onBackPressed()
-
-
         }
 
 
         idTorneo = intent.getStringExtra("idTorneo").toString()
 
-        Log.e("se ejecuto informacion partido ", "otra vez")
-
-
         val informacionPartido = File(this@InformacionPartido.filesDir, "cache_file.txt").readText()
 
-        Log.e("este es la informacion partido ", "$informacionPartido")
 
 
 
@@ -109,9 +90,6 @@ class InformacionPartido : AppCompatActivity() {
             veedor = json.getString("veedor")
             cancha = json.getString("cancha")
             estado = json.getString("estado")
-
-            Log.e("este es es l estado", " $estado y este es el id $idPartidos")
-
 
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
@@ -146,40 +124,24 @@ class InformacionPartido : AppCompatActivity() {
 
 
         escudoLocal.setOnClickListener {
-
             irActividadInfor(InformacionEquipo::class.java, idEquipoLocal)
-
-
         }
 
 
         escudoVisitante.setOnClickListener {
-
             irActividadInfor(InformacionEquipo::class.java, idEquipoVisitante)
-
         }
-
-
     }
-
 
     override fun onResume() {
         super.onResume()
         cargarUsuario()
         if (jsonUsuario != "presidente") {
-
             obtenerJugadoresEquipoLocal(idEquipoLocal.toString())
             obtenerJugadoresEquipoVisitante(idEquipoVisitante.toString())
-
         }
         cargarDatos(vocal, veedor, cancha)
-
-
-
-
-
     }
-
 
     fun cargarDatos(vocal: String, veedor: String, cancha: String) {
         var viewPager = findViewById(R.id.viewPager_partido) as ViewPager
@@ -192,53 +154,36 @@ class InformacionPartido : AppCompatActivity() {
 
 
 
-            if (jsonUsuario == "presidente") {
+        if (jsonUsuario == "presidente") {
+            comprobarResgistroEstadisticas(idTorneo.toInt(), idPartidos)
+            val bundle = Bundle()
 
 
-                comprobarResgistroEstadisticas(idTorneo.toInt(), idPartidos)
-
-                //Log.e("esto es el valor de la comprobacion ", "$comprobacion")
-
-
-                val bundle = Bundle()
-
-
-                bundle.putString("comprobación", "hola")
-
-
-                val fragmentRegistrarPartido = Fragment_registrar_partido()
-                fragmentRegistrarPartido.arguments = bundle
-
-
-                val fragmentRegistrarEstadisticas = Fragment_registrar_estadisticas()
-                fragmentRegistrarEstadisticas.arguments = bundle
+            val fragmentRegistrarPartido = Fragment_registrar_partido()
+            fragmentRegistrarPartido.arguments = bundle
+            val fragmentRegistrarEstadisticas = Fragment_registrar_estadisticas()
+            fragmentRegistrarEstadisticas.arguments = bundle
 
 
 
-                fragmentAdapter.addFragment(
-                    Fragment_registrar_alineacion_partido(), "REGISTRAR ALINEACIÓN"
-                )
-                fragmentAdapter.addFragment(fragmentRegistrarPartido, "REGISTRAR RESULTADO")
-                fragmentAdapter.addFragment(fragmentRegistrarEstadisticas, "REGISTRAR ESTADÍSTICAS")
+            fragmentAdapter.addFragment(
+                Fragment_registrar_alineacion_partido(), "REGISTRAR ALINEACIÓN"
+            )
+            fragmentAdapter.addFragment(fragmentRegistrarPartido, "REGISTRAR RESULTADO")
+            fragmentAdapter.addFragment(fragmentRegistrarEstadisticas, "REGISTRAR ESTADÍSTICAS")
 
-                comprobarResgistroEstadisticas(idTorneo.toInt(), idPartidos)
+            comprobarResgistroEstadisticas(idTorneo.toInt(), idPartidos)
+        } else {
+            val bundle = Bundle()
 
+            bundle.putString("vocal", vocal)
+            bundle.putString("veedor", veedor)
+            bundle.putString("cancha", cancha)
+            val fragmentInfoPartido = Fragment_informacion_partido()
+            fragmentInfoPartido.arguments = bundle
 
-            } else {
-
-                val bundle = Bundle()
-
-                bundle.putString("vocal", vocal)
-                bundle.putString("veedor", veedor)
-                bundle.putString("cancha", cancha)
-
-
-                val fragmentInfoPartido = Fragment_informacion_partido()
-                fragmentInfoPartido.arguments = bundle
-
-                fragmentAdapter.addFragment(fragmentInfoPartido, "INFO")
-                fragmentAdapter.addFragment(Fragment_alineacion_partido(), "ALINEACIÓN")
-
+            fragmentAdapter.addFragment(fragmentInfoPartido, "INFO")
+            fragmentAdapter.addFragment(Fragment_alineacion_partido(), "ALINEACIÓN")
         }
 
         viewPager.adapter = fragmentAdapter
@@ -257,13 +202,8 @@ class InformacionPartido : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 val fragmentTitle = fragmentAdapter.getPageTitle(position).toString()
                 if (fragmentTitle == "REGISTRAR ESTADÍSTICAS") {
-
-                    // Encontrar la posición del fragmento "REGISTRAR RESULTADO"
-
-
+                    // Se encuentra la posición del fragmento "REGISTRAR RESULTADO"
                     if (estado != "jugado") {
-
-
                         Toast.makeText(
                             this@InformacionPartido,
                             "Registre lo resultados, para poder registrar las estadísticas.",
@@ -271,27 +211,20 @@ class InformacionPartido : AppCompatActivity() {
                         ).show()
                         val resultFragmentPosition = getFragmentPosition("REGISTRAR RESULTADO")
                         if (resultFragmentPosition != -1) {
-                            // Cambiar al fragmento "REGISTRAR RESULTADO"
+                            // Se cambia al fragmento "REGISTRAR RESULTADO"
                             viewPager.currentItem = resultFragmentPosition
                         }
                     } else {
-
                     }
-
-
                 }
             }
         })
-
-
     }
 
     fun obtenerJugadoresEquipoLocal(idEquipo: String) {
-
         val url = consultaBaseDeDatos.obtenerURLConsulta("5_mostrar_jugadores.php")
         val client = OkHttpClient()
         val requestBody = FormBody.Builder().add("id_equipo", idEquipo).build()
-
         val request = Request.Builder().url(url).post(requestBody).build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -304,49 +237,41 @@ class InformacionPartido : AppCompatActivity() {
 
 
                         if (jsonObject.has("datos")) {
-
-
-                            // Nombre del archivo en caché
                             val fileName = "cache_ELocal.txt"
-
                             val filePath = File(this@InformacionPartido.filesDir, fileName)
-
                             val nuevosDatos = jsonData ?: ""
 
                             Log.e("este es el guardado del equipo local", "$jsonData")
 
                             filePath.writeText(nuevosDatos)
-
                         } else {
-                            // Manejar el caso donde "datos" no está presente en la respuesta
+                            // Se maneja el caso donde "datos" no está presente en la respuesta
+                            Log.e("", "No hay datos en la respuesta")
+
                         }
                     } catch (e: JSONException) {
                         e.printStackTrace()
+                        Log.e("", "Error al parsear el JSON")
 
                     }
                 } else {
-                    // Manejar errores en la respuesta HTTP
+                    // Se maneja los errores en la respuesta HTTP
+                    Log.e("Error HTTP", "Código: ${response.code}")
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+
+// Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
             }
         })
-
-
     }
 
-
     fun obtenerJugadoresEquipoVisitante(idEquipo: String) {
-
         val url = consultaBaseDeDatos.obtenerURLConsulta("5_mostrar_jugadores.php")
-
-
         val client = OkHttpClient()
-
         val requestBody = FormBody.Builder().add("id_equipo", idEquipo).build()
-
         val request = Request.Builder().url(url).post(requestBody).build()
 
 
@@ -364,40 +289,33 @@ class InformacionPartido : AppCompatActivity() {
 
 
                         if (jsonObject.has("datos")) {
-
-
-                            // Nombre del archivo en caché
                             val fileName = "cache_EVisitante.txt"
-
                             val filePath = File(this@InformacionPartido.filesDir, fileName)
-
                             val nuevosDatos = jsonData ?: ""
                             Log.e("este es el guardado del equipo Visitante", "$jsonData")
 
 
                             filePath.writeText(nuevosDatos)
-
-
                         } else {
-                            // Manejar el caso donde "datos" no está presente en la respuesta
+                            // Se maneja el caso donde "datos" no está presente en la respuesta
+                            Log.e("", "No hay datos en la respuesta")
                         }
                     } catch (e: JSONException) {
                         e.printStackTrace()
-
+                        Log.e("", "Error al parsear el JSON")
                     }
                 } else {
-                    // Manejar errores en la respuesta HTTP
+                    // Se maneja los errores en la respuesta HTTP
+                    Log.e("Error HTTP", "Código: ${response.code}")
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+                // Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
             }
         })
-
-
     }
-
 
     fun irActividad(
         clase: Class<*>
@@ -405,7 +323,6 @@ class InformacionPartido : AppCompatActivity() {
         val intent = Intent(this@InformacionPartido, clase)
         startActivity(intent)
     }
-
 
     fun irActividadInfor(clase: Class<*>, id: Int) {
         val intent = Intent(this@InformacionPartido, clase)
@@ -427,39 +344,28 @@ class InformacionPartido : AppCompatActivity() {
     }
 
     private lateinit var jsonUsuario: String
-
-    private fun cargarUsuario(){
-
+    private fun cargarUsuario() {
         val archivoUsuario = File(this.filesDir, "cache_user.txt")
 
         if (archivoUsuario.exists()) {
-
             val UsuarioLogin = archivoUsuario.readText()
-
-
             val json = JSONObject(UsuarioLogin)
 
-             jsonUsuario = json.getString("tipo_usuario")
+            jsonUsuario = json.getString("tipo_usuario")
 
-            if(estado=="porjugar"){
-                resultadoPartido.text="-"
+            if (estado == "porjugar") {
+                resultadoPartido.text = "-"
             }
         }
     }
 
     private fun comprobarResgistroEstadisticas(idTorneo: Int, idPartidos: Int) {
-
-
         val url = consultaBaseDeDatos.obtenerURLConsulta("7_comprobar_estadisticas_jugador.php")
-
         val client = OkHttpClient()
-
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("id_torneo", idTorneo.toString())
             .addFormDataPart("id_partido", idPartidos.toString())
-
-
         val request = Request.Builder()
             .url(url)
             .post(requestBody.build())
@@ -467,70 +373,40 @@ class InformacionPartido : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                // Manejar la respuesta del servidor
                 if (response.isSuccessful) {
-                    // Éxito
                     val jsonData = response.body?.string()
 
                     Log.e("resultado de la comprobacion", "$jsonData")
-
-
-                    // Verifica si jsonData no es nulo y luego analiza el JSON
                     jsonData?.let {
                         val jsonObject = JSONObject(it)
-
-                        // Intenta extraer el valor de "existen_registros"
                         val existenRegistros = jsonObject.optBoolean("existen_registros")
-
-                        // Intenta extraer el valor de "no_existen_registros"
                         val noExistenRegistros = jsonObject.optBoolean("no_existen_registros")
-
-                        // Verifica qué valor está presente y actúa en consecuencia
                         if (existenRegistros) {
-
                             guardarComprobacionEstadisticas(jsonData)
-
-
                         } else if (noExistenRegistros) {
-
                             guardarComprobacionEstadisticas(jsonData)
                         } else {
                             println("Ni existen registros ni no existen registros")
                         }
                     }
-
-
                 } else {
-
-
                     Log.e("Error respuesat HTTP", "Fragment registrar estadísticas")
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                // Manejar errores de conexión
+
+// Se maneja los errores de conexión
+                Log.e("Error de conexión", "Falló la conexión: ${e.message}")
             }
         })
-
-
     }
 
     fun guardarComprobacionEstadisticas(resultado: String) {
         val fileName = "cache_ComEst.txt"
-
         val filePath = File(this@InformacionPartido.filesDir, fileName)
-
         val nuevosDatos = resultado
 
         filePath.writeText(nuevosDatos)
-
-
-
     }
-
-
-
-
-
-
 }
